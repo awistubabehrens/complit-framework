@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computational Literacy Design Guidance</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Open Sans', sans-serif; background: #f7f8fa; color: #1a1a1a; line-height: 1.6; font-size: 15px; }
+
+/* ── TOP NAV ── */
+.top-nav { background: #1A4C81; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+.top-nav-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: stretch; padding: 0 2rem; }
+.nav-brand { color: rgba(255,255,255,0.65); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; display: flex; align-items: center; padding-right: 1.5rem; border-right: 1px solid rgba(255,255,255,0.2); margin-right: 1rem; white-space: nowrap; }
+.nav-tab { color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 600; padding: 16px 18px; border-bottom: 3px solid transparent; cursor: pointer; transition: color 0.15s, border-color 0.15s; white-space: nowrap; font-family: 'Open Sans', sans-serif; }
+.nav-tab:hover { color: #fff; }
+.nav-tab.active { color: #fff; border-bottom-color: #59C3B4; }
+
+/* ── PAGE SHELL ── */
+.page { max-width: 960px; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── BUTTONS ── */
+.print-bar { display: flex; justify-content: flex-end; margin-bottom: 1.5rem; gap: 8px; flex-wrap: wrap; }
+.btn-print { font-size: 11px; font-weight: 700; padding: 7px 14px; border-radius: 0; border: 1.5px solid #1A4C81; background: #fff; color: #1A4C81; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.12s; font-family: 'Open Sans', sans-serif; letter-spacing: 0.04em; }
+.btn-print:hover { background: #ADE0EE; border-color: #1A4C81; }
+.btn-print svg { width: 13px; height: 13px; }
+.btn-pdf { background: #EF464B; border-color: #EF464B; color: #fff; }
+.btn-pdf:hover { background: #c73338; border-color: #c73338; color: #fff; }
+
+/* ── TYPE SCALE ──
+   Page title (h1):        Bebas Neue 36px  — one per tab
+   Section heading (h2):   Open Sans Bold 20px — major named sections
+   Card/panel title (h3):  Open Sans Bold 16px — domain name, element name
+   Label/eyebrow:          Open Sans Bold 11px uppercase tracked — meta context
+   Section divider:        Open Sans Bold 11px uppercase tracked + scarlet rule
+   Body:                   Open Sans 15px / line-height 1.75
+   Secondary body:         Open Sans 14px — card descriptions, why text
+   Caption/meta:           Open Sans 12px — sources, grades, small labels
+   Minimum font size:      11px (accessibility floor)
+── */
+h1 { font-family: 'Bebas Neue', 'Open Sans', sans-serif; font-weight: 400; font-size: 36px; color: #1A4C81; letter-spacing: 0.03em; line-height: 1.1; margin-bottom: 12px; }
+h2 { font-family: 'Open Sans', sans-serif; font-weight: 700; font-size: 20px; color: #1A4C81; line-height: 1.25; margin-bottom: 10px; }
+h3 { font-family: 'Open Sans', sans-serif; font-weight: 700; font-size: 16px; color: #1A4C81; line-height: 1.3; margin-bottom: 8px; }
+.eyebrow { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #59C3B4; font-weight: 700; margin-bottom: 8px; font-family: 'Open Sans', sans-serif; }
+.intro { font-size: 15px; color: #444; line-height: 1.75; margin-bottom: 2rem; max-width: 700px; }
+.section-label { font-size: 16px; letter-spacing: 0.06em; text-transform: uppercase; color: #1A4C81; font-weight: 700; margin-bottom: 14px; font-family: 'Open Sans', sans-serif; border-left: 3px solid #EF464B; padding-left: 10px; }
+.sub-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #555; font-weight: 700; margin-bottom: 12px; font-family: 'Open Sans', sans-serif; padding-left: 13px; border-left: 2px solid #ADE0EE; }
+.ai-pill { display: inline-block; font-size: 10px; background: #59C3B4; color: #fff; padding: 2px 7px; border-radius: 0; font-weight: 700; margin-left: 4px; letter-spacing: 0.04em; }
+.ai-mark { display: inline-block; font-size: 10px; background: #59C3B4; color: #fff; padding: 2px 6px; border-radius: 0; font-weight: 700; margin-left: 4px; }
+.rule { height: 3px; width: 48px; background: #EF464B; margin-bottom: 2rem; border-radius: 0; }
+.section-label + .outcomes-grid,
+.section-label + .leaps-grid,
+.section-label + .leaps-carousel,
+.section-label + .band-grid,
+.section-label + .elements-grid { margin-top: 0; }
+.mt-section { margin-top: 2.5rem; }
+.mb-section { margin-bottom: 2rem; }
+.mb-sm { margin-bottom: 1.5rem; }
+.mt-btn { margin-top: 14px; }
+
+/* ── SHARED CONTENT PATTERNS ── */
+.intro-lead { font-size: 15px; color: #1A4C81; font-weight: 700; line-height: 1.75; margin-bottom: 1rem; max-width: 740px; }
+.intro-body { font-size: 15px; color: #444; line-height: 1.75; margin-bottom: 1rem; max-width: 740px; }
+.intro-divider { margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid #dde3ec; }
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn { font-size: 12px; font-weight: 700; padding: 8px 16px; border: 1.5px solid #1A4C81; color: #1A4C81; background: #fff; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-family: 'Open Sans', sans-serif; letter-spacing: 0.03em; transition: background 0.12s; }
+.btn:hover { background: #ADE0EE; }
+.btn.primary { background: #1A4C81; color: #fff; }
+.btn.primary:hover { background: #163f6b; }
+.level-subhead { font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin: 14px 0 8px; }
+.level-subhead:first-child { margin-top: 0; }
+.level-subhead-group { padding-top: 4px; }
+
+/* ── OVERVIEW TAB ── */
+.logic-row { display: flex; align-items: stretch; gap: 0; margin-bottom: 2.5rem; border: 1.5px solid #1A4C81; }
+.logic-box { flex: 1; padding: 20px 16px; background: #fff; text-align: center; cursor: pointer; transition: background 0.12s; border-right: 1.5px solid #1A4C81; }
+.logic-box:last-child { border-right: none; }
+.logic-box:hover { background: #ADE0EE; }
+.logic-icon { display: none; }
+.logic-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #1A4C81; letter-spacing: 0.04em; margin-bottom: 5px; }
+.logic-sub { font-size: 13px; color: #555; margin-top: 3px; }
+.logic-cta { font-size: 11px; color: #EF464B; margin-top: 10px; font-weight: 700; letter-spacing: 0.04em; }
+.logic-arrow { display: none; }
+
+.leaps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+.leap-card { border-radius: 0; padding: 14px 16px; cursor: pointer; border: 1.5px solid #ADE0EE; transition: border-color 0.15s; }
+.leap-card:hover { border-color: #1A4C81; }
+.leap-card.active { border-color: #1A4C81; background: #ADE0EE; }
+.lc-name { font-family: 'Open Sans', sans-serif; font-size: 13px; font-weight: 700; line-height: 1.35; margin-bottom: 5px; color: #1A4C81; }
+.lc-from { font-size: 12px; color: #555; line-height: 1.4; }
+.lc-blue   { background: #fff; border: 1.5px solid #ADE0EE !important; } .lc-blue .lc-name   { color: #1A4C81; }
+.lc-green  { background: #fff; border: 1.5px solid #ADE0EE !important; } .lc-green .lc-name  { color: #1A4C81; }
+.lc-amber  { background: #fff; border: 1.5px solid #ADE0EE !important; } .lc-amber .lc-name  { color: #1A4C81; }
+.lc-red    { background: #fff; border: 1.5px solid #ADE0EE !important; } .lc-red .lc-name    { color: #1A4C81; }
+.lc-purple { background: #fff; border: 1.5px solid #ADE0EE !important; } .lc-purple .lc-name { color: #1A4C81; }
+.lc-coral  { background: #fff; border: 1.5px solid #ADE0EE !important; } .lc-coral .lc-name  { color: #1A4C81; }
+
+.leap-detail { border: 1.5px solid #ADE0EE; border-radius: 0; padding: 20px 24px; margin-bottom: 2.5rem; background: #fff; display: none; border-left: 4px solid #1A4C81; }
+.leap-detail.visible { display: block; }
+.ld-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 10px; border-radius: 0; margin-bottom: 12px; background: #ADE0EE; color: #1A4C81; }
+.ld-tag-blue   { background: #ADE0EE; color: #1A4C81; }
+.ld-tag-green  { background: #ADE0EE; color: #1A4C81; }
+.ld-tag-amber  { background: #ADE0EE; color: #1A4C81; }
+.ld-tag-red    { background: #ADE0EE; color: #1A4C81; }
+.ld-tag-purple { background: #ADE0EE; color: #1A4C81; }
+.ld-tag-coral  { background: #ADE0EE; color: #1A4C81; }
+.ld-from { font-size: 13px; color: #666; font-style: italic; margin-bottom: 10px; }
+.ld-body { font-size: 14px; color: #333; line-height: 1.75; }
+
+.outcomes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 8px; }
+.outcome-card { border: 1px solid #dde3ec; border-radius: 0; padding: 16px 18px; background: #fff; cursor: pointer; border-left: 4px solid; transition: background 0.12s; }
+.outcome-card:hover { background: #f5faff; }
+.oc-num { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.oc-name { font-family: 'Open Sans', sans-serif; font-size: 15px; font-weight: 700; color: #1A4C81; margin-bottom: 6px; line-height: 1.3; }
+.oc-desc { font-size: 13px; color: #555; line-height: 1.6; }
+.oc-cta { font-size: 11px; color: #EF464B; margin-top: 10px; font-weight: 700; letter-spacing: 0.03em; }
+.o1, .o2, .o3, .o4, .o5, .o6 { border-left-color: #EF464B; }
+.o1 .oc-num, .o2 .oc-num, .o3 .oc-num, .o4 .oc-num, .o5 .oc-num, .o6 .oc-num { color: #EF464B; }
+
+.legend-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 2.5rem; }
+.legend-item { font-size: 12px; color: #555; display: flex; align-items: center; gap: 6px; }
+
+.elements-note { font-size: 14px; color: #444; line-height: 1.7; padding: 14px 18px; background: #fff; border: 1px solid #dde3ec; border-left: 4px solid #1A4C81; border-radius: 0; margin-bottom: 14px; }
+.elements-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 2.5rem; }
+.elem-row { border: 1px solid #dde3ec; border-radius: 0; padding: 12px 14px; background: #fff; font-size: 13px; font-weight: 700; color: #1A4C81; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: background 0.12s; }
+.elem-row:hover { background: #ADE0EE; color: #1A4C81; }
+.elem-dot { width: 8px; height: 8px; border-radius: 0; background: #59C3B4; flex-shrink: 0; }
+.elem-cta { font-size: 11px; color: #EF464B; margin-left: auto; font-weight: 700; }
+
+.band-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-bottom: 2.5rem; border: 1.5px dashed #1A4C81; }
+.band-card { padding: 16px 18px; background: #fff; border-right: 1.5px dashed #1A4C81; }
+.band-card:last-child { border-right: none; }
+.band-label { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #1A4C81; letter-spacing: 0.04em; margin-bottom: 8px; }
+.band-body { font-size: 13px; color: #444; line-height: 1.65; }
+
+/* ── OPPORTUNITY TAB ── */
+.opp-hero { background: #1A4C81; border-radius: 0; padding: 32px 36px; margin-bottom: 2rem; border-left: 6px solid #EF464B; }
+.opp-hero-eyebrow { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #59C3B4; font-weight: 700; margin-bottom: 10px; font-family: 'Open Sans', sans-serif; }
+.opp-hero h2 { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 30px; color: #fff; line-height: 1.1; margin-bottom: 14px; letter-spacing: 0.03em; }
+.opp-hero p { font-size: 15px; color: rgba(255,255,255,0.88); line-height: 1.75; margin-bottom: 12px; }
+.opp-hero p:last-child { margin-bottom: 0; }
+.opp-hero a { color: #ADE0EE; font-weight: 700; }
+.opp-student-needs { background: rgba(255,255,255,0.08); border-left: 3px solid #59C3B4; border-radius: 0; padding: 14px 18px; margin: 16px 0 0; }
+.opp-student-needs p { font-size: 14px; color: rgba(255,255,255,0.92); margin-bottom: 8px; font-weight: 700; }
+.opp-student-needs ul { list-style: none; }
+.opp-student-needs li { font-size: 14px; color: rgba(255,255,255,0.85); padding: 4px 0 4px 18px; position: relative; line-height: 1.6; }
+.opp-student-needs li::before { content: '→'; position: absolute; left: 0; color: #59C3B4; font-weight: 700; }
+
+.opp-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 2rem; }
+.opp-col-card { border: 1px solid #dde3ec; border-radius: 0; padding: 18px 20px; background: #fff; }
+.opp-col-card.opportunity { border-top: 4px solid #59C3B4; }
+.opp-col-card.challenge { border-top: 4px solid #EF464B; }
+.opp-col-label { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.04em; margin-bottom: 12px; }
+.opp-col-card.opportunity .opp-col-label { color: #218380; }
+.opp-col-card.challenge .opp-col-label { color: #EF464B; }
+.opp-col-card ul { list-style: none; }
+.opp-col-card li { font-size: 14px; color: #333; padding: 6px 0 6px 20px; position: relative; border-bottom: 1px solid #f0f0f0; line-height: 1.6; }
+.opp-col-card li:last-child { border-bottom: none; }
+.opp-col-card.opportunity li::before { content: '✓'; position: absolute; left: 0; color: #59C3B4; font-weight: 700; font-size: 12px; top: 8px; }
+.opp-col-card.challenge li::before { content: '!'; position: absolute; left: 0; color: #EF464B; font-weight: 700; font-size: 12px; top: 8px; }
+.opp-redesign-box { background: #ADE0EE; border-left: 4px solid #1A4C81; border-radius: 0; padding: 18px 22px; margin-bottom: 2rem; }
+.opp-redesign-box p { font-size: 14px; color: #1A4C81; line-height: 1.75; margin-bottom: 10px; }
+.opp-redesign-box p:last-child { margin-bottom: 0; }
+.opp-redesign-box strong { color: #1A4C81; font-weight: 700; }
+.opp-redesign-cta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.opp-cta-btn { font-size: 12px; font-weight: 700; padding: 8px 16px; border-radius: 0; border: 1.5px solid #1A4C81; color: #1A4C81; background: #fff; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: background 0.12s; text-decoration: none; letter-spacing: 0.03em; font-family: 'Open Sans', sans-serif; }
+.opp-cta-btn:hover { background: #ADE0EE; }
+.opp-cta-btn.primary { background: #1A4C81; color: #fff; border-color: #1A4C81; }
+.opp-cta-btn.primary:hover { background: #163f6b; }
+
+.trend-section { margin-bottom: 8px; }
+.trend-header { background: #1A4C81; color: #fff; padding: 14px 18px; border-radius: 0; display: flex; align-items: flex-start; justify-content: space-between; cursor: pointer; border-left: 4px solid #59C3B4; }
+.trend-num { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: rgba(255,255,255,0.3); margin-right: 14px; flex-shrink: 0; letter-spacing: 0.04em; line-height: 1; }
+.trend-header-text { flex: 1; }
+.trend-title { font-size: 14px; font-weight: 700; color: #fff; }
+.trend-headline { font-size: 13px; color: rgba(255,255,255,0.72); margin-top: 4px; line-height: 1.5; }
+.trend-toggle { font-size: 12px; font-weight: 700; color: #ADE0EE; flex-shrink: 0; margin-left: 12px; padding-top: 2px; letter-spacing: 0.04em; }
+.trend-body { border: 1px solid #1A4C81; border-top: none; border-radius: 0; background: #fff; display: none; }
+.trend-body.open { display: block; }
+.stat-row { padding: 16px 18px; border-bottom: 1px solid #f0f0f0; font-size: 14px; color: #333; line-height: 1.7; }
+.stat-row:last-child { border-bottom: none; }
+.stat-big { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: #1A4C81; display: inline; letter-spacing: 0.04em; line-height: 1; }
+.stat-source { font-size: 12px; color: #888; margin-top: 6px; display: block; }
+.stat-source a { color: #218380; font-weight: 600; }
+.trend-quote { background: #ADE0EE; border-left: 4px solid #1A4C81; padding: 16px 18px; margin: 0 18px 14px; border-radius: 0; font-size: 14px; color: #1A4C81; font-style: italic; line-height: 1.75; }
+.trend-quote cite { font-style: normal; font-size: 12px; color: #218380; display: block; margin-top: 8px; font-weight: 700; }
+
+/* ── OUTCOMES TAB ── */
+.domain-tabs { display: flex; gap: 0; flex-wrap: wrap; border-bottom: 2px solid #1A4C81; margin-bottom: 0; }
+.domain-tab { font-size: 13px; padding: 9px 16px; border-radius: 0; border: 1px solid #dde3ec; border-bottom: none; background: #f0f4fa; color: #555; font-weight: 600; cursor: pointer; transition: background 0.12s; margin-right: 2px; font-family: 'Open Sans', sans-serif; }
+.domain-tab:hover { background: #ADE0EE; color: #1A4C81; }
+.domain-tab.active { background: #1A4C81; color: #fff; border-color: #1A4C81; }
+.domain-tab .tab-ai { font-size: 10px; background: #59C3B4; color: #fff; padding: 2px 6px; border-radius: 0; margin-left: 4px; font-weight: 700; }
+
+.domain-panel { border: 1px solid #1A4C81; border-top: none; background: #fff; padding: 28px 32px; display: none; }
+.domain-panel.active { display: block; }
+.dp-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+.dp-num { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: #ADE0EE; line-height: 1; flex-shrink: 0; width: 52px; letter-spacing: 0.04em; }
+.dp-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: #1A4C81; line-height: 1.1; margin-bottom: 10px; letter-spacing: 0.03em; }
+.dp-desc { font-size: 14px; color: #444; line-height: 1.75; }
+.dp-why { background: #fff; border: 1.5px solid #1A4C81; padding: 16px 18px; border-radius: 0; margin-bottom: 20px; }
+.dp-why-label { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #1A4C81; letter-spacing: 0.04em; margin-bottom: 8px; }
+.dp-why-body { font-size: 13px; color: #444; line-height: 1.7; }
+.dp-leaps { margin-bottom: 20px; }
+.dp-leaps-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #555; margin-bottom: 10px; font-family: 'Open Sans', sans-serif; }
+.leap-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.leap-chip { font-size: 12px; padding: 4px 12px; border-radius: 0; font-weight: 700; border: 1px solid; }
+.chip-blue   { background: #ADE0EE; color: #1A4C81; border-color: #1A4C81; }
+.chip-green { background: #ADE0EE; color: #1A4C81; border-color: #1A4C81; }
+.chip-amber { background: #ADE0EE; color: #1A4C81; border-color: #1A4C81; }
+.chip-red { background: #ADE0EE; color: #1A4C81; border-color: #1A4C81; }
+.chip-purple { background: #ADE0EE; color: #1A4C81; border-color: #1A4C81; }
+.chip-coral { background: #ADE0EE; color: #1A4C81; border-color: #1A4C81; }
+
+.skills-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+.skills-table th { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; background: #1A4C81; padding: 12px 14px; text-align: left; }
+.skills-table td { padding: 12px 14px; font-size: 14px; color: #333; border-bottom: 1px solid #f0f0f0; vertical-align: top; line-height: 1.6; }
+.skills-table tr:last-child td { border-bottom: none; }
+.skills-table tr:hover td { background: #f5faff; }
+.skill-code { font-weight: 700; color: #1A4C81; white-space: nowrap; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.04em; }
+.skill-name { font-size: 14px; font-weight: 700; color: #1A4C81; }
+
+.skills-expander { margin-top: 8px; }
+.skills-expander summary { font-size: 13px; font-weight: 700; color: #1A4C81; padding: 10px 0; cursor: pointer; list-style: none; letter-spacing: 0.03em; }
+.skills-expander summary::-webkit-details-marker { display: none; }
+.skills-expander summary::before { content: '▶  '; font-size: 10px; }
+.skills-expander[open] summary::before { content: '▼  '; }
+.level-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin: 12px 0; border: 1px solid #1A4C81; }
+.level-card { padding: 14px 16px; background: #fff; border-right: 1px solid #1A4C81; }
+.level-card:last-child { border-right: none; }
+.level-label { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: #1A4C81; letter-spacing: 0.04em; margin-bottom: 2px; }
+.level-grade { font-size: 11px; color: #888; margin-bottom: 8px; font-weight: 700; letter-spacing: 0.04em; }
+.level-body { font-size: 13px; color: #333; line-height: 1.6; }
+
+/* ── STUDENT EXPERIENCE TAB ── */
+.exp-intro { background: #ADE0EE; border-left: 4px solid #1A4C81; padding: 18px 22px; border-radius: 0; margin-bottom: 2rem; font-size: 14px; color: #1A4C81; line-height: 1.75; }
+.exp-tabs { display: flex; gap: 0; margin-bottom: 0; border-bottom: 2px solid #1A4C81; }
+.exp-tab { font-size: 13px; font-weight: 600; padding: 9px 16px; border-radius: 0; border: 1px solid #dde3ec; border-bottom: none; background: #f0f4fa; color: #555; font-family: 'Open Sans', sans-serif; cursor: pointer; transition: background 0.12s; margin-right: 2px; }
+.exp-tab.active { background: #1A4C81; color: #fff; border-color: #1A4C81; }
+.exp-panel { border: 1px solid #1A4C81; border-top: none; background: #fff; padding: 28px 32px; display: none; }
+.exp-panel.active { display: block; }
+.exp-why { margin-bottom: 1.5rem; }
+.exp-why-label { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: #1A4C81; letter-spacing: 0.03em; line-height: 1.1; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 2px solid #EF464B; display: inline-block; }
+.exp-why-body { font-size: 14px; color: #444; line-height: 1.75; margin-top: 10px; }
+
+.phase-block { margin-bottom: 20px; }
+.phase-header { font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 10px; padding: 10px 16px; background: #1A4C81; border-radius: 0; }
+.phase-list { list-style: none; }
+.phase-list li { font-size: 14px; color: #333; padding: 6px 0 6px 20px; position: relative; border-bottom: 1px solid #f5f5f5; line-height: 1.7; }
+.phase-list li:last-child { border-bottom: none; }
+.phase-list li::before { content: '—'; position: absolute; left: 0; color: #59C3B4; font-weight: 700; font-size: 14px; }
+
+.grade-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 20px; border: 1.5px solid #1A4C81; }
+.grade-card { padding: 16px 18px; background: #fff; border-right: 1.5px solid #1A4C81; }
+.grade-card:last-child { border-right: none; }
+.grade-label { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #1A4C81; letter-spacing: 0.04em; margin-bottom: 8px; }
+.grade-body { font-size: 13px; color: #444; line-height: 1.7; }
+
+.what-box { background: #fff; border: 1px solid #dde3ec; border-left: 3px solid #59C3B4; border-radius: 0; padding: 16px 20px; margin-bottom: 10px; }
+.wb-title { font-size: 15px; font-weight: 700; color: #1A4C81; margin-bottom: 6px; }
+.wb-body { font-size: 14px; color: #444; line-height: 1.7; }
+
+/* ── SCHOOL ELEMENTS TAB ── */
+.elem-nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 2rem; }
+.en-btn { border: 1.5px solid #1A4C81; border-radius: 0; padding: 14px 16px; background: #fff; cursor: pointer; transition: background 0.12s; text-align: left; width: 100%; font-family: 'Open Sans', sans-serif; }
+.en-btn:hover { background: #ADE0EE; }
+.en-btn.active { background: #1A4C81; border-color: #1A4C81; }
+.en-num { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: #EF464B; margin-bottom: 4px; letter-spacing: 0.04em; }
+.en-btn.active .en-num { color: #59C3B4; }
+.en-name { font-size: 13px; font-weight: 700; color: #1A4C81; line-height: 1.4; }
+.en-btn.active .en-name { color: #fff; }
+
+.element-panel { display: none; }
+.element-panel.active { display: block; }
+.ep-header { display: flex; align-items: flex-start; gap: 0; margin-bottom: 24px; border-left: 6px solid #1A4C81; padding-left: 18px; }
+.ep-icon { display: none; }
+.ep-title { font-family: 'Bebas Neue', sans-serif; font-size: 30px; color: #1A4C81; margin-bottom: 5px; letter-spacing: 0.03em; line-height: 1.1; }
+.ep-tagline { font-size: 14px; color: #555; font-style: italic; line-height: 1.6; }
+.ep-section { margin-bottom: 24px; }
+.ep-section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #1A4C81; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #EF464B; font-family: 'Open Sans', sans-serif; }
+.goals-list { list-style: none; }
+.goals-list li { font-size: 14px; color: #333; line-height: 1.7; padding: 10px 0 10px 24px; position: relative; border-bottom: 1px solid #f0f0f0; }
+.goals-list li:last-child { border-bottom: none; }
+.goals-list li::before { content: '→'; position: absolute; left: 0; color: #59C3B4; font-weight: 700; }
+.challenge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid #dde3ec; }
+.challenge-card { padding: 16px 18px; background: #fff; border-right: 1px solid #dde3ec; }
+.challenge-card:nth-child(even) { border-right: none; }
+.cc-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; font-family: 'Open Sans', sans-serif; }
+.cc-label.challenge { color: #EF464B; }
+.cc-label.response { color: #218380; }
+.wb-body-elem { font-size: 14px; color: #444; line-height: 1.7; }
+.outcomes-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.outcome-chip { font-size: 12px; padding: 4px 12px; border-radius: 0; background: #ADE0EE; color: #1A4C81; border: 1px solid #1A4C81; font-weight: 700; }
+.leaps-row { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* ── LEAPS CAROUSEL ── */
+.leaps-carousel-wrap { border: 1.5px solid #ADE0EE; margin-bottom: 0; }
+.leaps-carousel-nav { display: flex; align-items: stretch; background: #fff; }
+.carousel-arrow { background: #fff; border: none; border-right: 1.5px solid #ADE0EE; padding: 0 16px; cursor: pointer; font-size: 18px; color: #1A4C81; font-weight: 700; transition: background 0.12s; flex-shrink: 0; }
+.carousel-arrow:last-child { border-right: none; border-left: 1.5px solid #ADE0EE; }
+.carousel-arrow:hover { background: #ADE0EE; }
+.carousel-track { display: flex; flex: 1; overflow: hidden; }
+#carousel-track { display: flex; width: 200%; transition: transform 0.25s ease; flex-shrink: 0; }
+.carousel-card { flex: 0 0 calc(100% / 6); padding: 16px 18px; background: #fff; border-right: 1.5px solid #ADE0EE; cursor: pointer; transition: background 0.12s; }
+.carousel-card:last-child { border-right: none; }
+.carousel-card:hover { background: #f0f9fc; }
+.carousel-card.active { background: #ADE0EE; }
+.cc-leap-num { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #ADE0EE; line-height: 1; margin-bottom: 4px; }
+.carousel-card.active .cc-leap-num { color: #1A4C81; }
+.carousel-card:hover .cc-leap-num { color: #1A4C81; }
+.cc-leap-name { font-size: 13px; font-weight: 700; color: #1A4C81; line-height: 1.35; margin-bottom: 3px; }
+.cc-leap-from { font-size: 11px; color: #666; line-height: 1.4; }
+.carousel-counter { font-size: 11px; color: #888; font-weight: 700; padding: 0 12px; display: flex; align-items: center; white-space: nowrap; border-left: 1.5px solid #ADE0EE; }
+.leap-carousel-detail { border: 1.5px solid #ADE0EE; border-top: none; background: #fff; padding: 20px 24px; margin-bottom: 2rem; border-left: 4px solid #1A4C81; display: none; }
+.leap-carousel-detail.visible { display: block; }
+.lcd-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 10px; background: #ADE0EE; color: #1A4C81; margin-bottom: 14px; }
+.lcd-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid #dde3ec; }
+.lcd-col { padding: 16px 18px; }
+.lcd-col:first-child { border-right: 1px solid #dde3ec; background: #f7f8fa; }
+.lcd-col-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+.lcd-col:first-child .lcd-col-label { color: #888; }
+.lcd-col:last-child .lcd-col-label { color: #1A4C81; }
+.lcd-col-title { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: #1A4C81; letter-spacing: 0.03em; margin-bottom: 8px; }
+.lcd-col:first-child .lcd-col-title { color: #888; }
+.lcd-col ul { list-style: none; margin-top: 8px; }
+.lcd-col li { font-size: 13px; color: #333; line-height: 1.65; padding: 5px 0 5px 16px; position: relative; border-bottom: 1px solid #f0f0f0; }
+.lcd-col:first-child li { color: #666; }
+.lcd-col li:last-child { border-bottom: none; }
+.lcd-col li::before { content: '—'; position: absolute; left: 0; color: #ADE0EE; font-weight: 700; }
+.lcd-col:last-child li::before { color: #59C3B4; }
+.lcd-from { font-size: 13px; color: #666; font-style: italic; margin-bottom: 8px; }
+.lcd-body { font-size: 14px; color: #333; line-height: 1.75; }
+.hqi-link { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid #eee; font-size: 13px; color: #999; }
+.hqi-link a { color: #999; font-weight: 600; text-decoration: underline; text-decoration-color: #dde3ec; }
+.hqi-link a:hover { color: #1A4C81; }
+
+/* ── FOOTER ── */
+.page-footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 3px solid #EF464B; font-size: 13px; color: #555; line-height: 1.7; }
+.page-footer strong { color: #1A4C81; font-weight: 700; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .top-nav-inner { padding: 0 1rem; overflow-x: auto; }
+  .nav-brand { display: none; }
+  .leaps-grid, .outcomes-grid, .elements-grid, .elem-nav-grid, .opp-two-col { grid-template-columns: 1fr; }
+  .logic-row { flex-direction: column; border: none; gap: 4px; }
+  .logic-box { border: 1.5px solid #1A4C81; }
+  .band-grid, .grade-grid, .level-grid { grid-template-columns: 1fr; }
+  .band-card, .grade-card, .level-card { border-right: none; border-bottom: 1.5px dashed #1A4C81; }
+  .challenge-grid { grid-template-columns: 1fr; }
+  .challenge-card { border-right: none; border-bottom: 1px solid #dde3ec; }
+  .domain-tabs, .exp-tabs { flex-wrap: wrap; }
+  .page { padding: 1.5rem 1rem 4rem; }
+}
+
+@media print {
+  .top-nav, .print-bar { display: none !important; }
+  .tab-panel { display: block !important; page-break-before: always; }
+  .tab-panel:first-of-type { page-break-before: avoid; }
+}
+
+
+</style>
+</head>
+
+<body>
+
+<nav class="top-nav" role="navigation" aria-label="Framework sections">
+  <div class="top-nav-inner">
+    <div class="nav-brand">Computational Literacy Design Guidance</div>
+    <div class="nav-tab active" onclick="showTab('overview')">Overview</div>
+    <div class="nav-tab" onclick="showTab('opportunity')">The Opportunity</div>
+    <div class="nav-tab" onclick="showTab('outcomes')">Outcomes</div>
+    <div class="nav-tab" onclick="showTab('experience')">Student Experience</div>
+    <div class="nav-tab" onclick="showTab('elements')">School Elements</div>
+    <div class="nav-tab" onclick="showTab('seeit')">See It In Action</div>
+    <div class="nav-tab" onclick="showTab('piloting')">Piloting & Implementation</div>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- 
+     TAB 1 — OVERVIEW
+ -->
+<div class="tab-panel active" id="tab-overview">
+  <div class="print-bar">
+    <button class="btn-print" onclick="window.print()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
+      Print this tab
+    </button>
+    <button class="btn-print btn-pdf" onclick="alert('PDF export coming soon. For now, use Print → Save as PDF in your browser.')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Download PDF
+    </button>
+  </div>
+
+  <!-- Introduction -->
+  <div class="eyebrow">Computational Literacy · Design Guidance</div>
+  <h1>Reimagining Computer Science & AI learning</h1>
+  <div class="rule"></div>
+
+  <p class="intro-lead">Today's students are entering a world where digital systems, artificial intelligence, and computational thinking shape nearly every aspect of life. Yet most K–12 computer science experiences remain narrowly focused on basic skills in ways that are disconnected from students' interests and futures.</p>
+  <p class="intro-body">The challenge before schools is not simply to "add CS and AI" to existing programs. It is to redesign learning so that young people become capable, ethical, creative, and empowered participants in an AI-enabled world. Federal and state investments are growing, public support is strong, and the research on effective CS learning is sharpening. This is a rare alignment of opportunity communities can't afford to miss.</p>
+  <p class="intro-body">Meeting this moment calls for a shared definition of rigorous outcomes and a coherent redesign of how CS and AI are learned — which is what this framework provides.</p>
+  <div class="btn-row intro-divider">
+    <span onclick="showTab('opportunity')" class="btn primary">See the full evidence base →</span>
+    <a href="https://docs.google.com/document/d/1i8b7LgO-Ajc1D1Q3L7FC9HblN7Mcs4DY0nqtFm05FCk/edit?tab=t.d4hqi1ityffp" target="_blank" class="btn">Explore trends & research →</a>
+  </div>
+
+  <!-- Section 1: Progression -->
+  <div class="section-label">Progression of Computational Literacy design</div>
+  <div class="logic-row">
+    <div class="logic-box" onclick="showTab('outcomes')">
+      <div class="logic-title">Student outcomes</div>
+      <div class="logic-sub">Six learning domains</div>
+      <div class="logic-cta">Explore →</div>
+    </div>
+    <div class="logic-box" onclick="showTab('experience')">
+      <div class="logic-title">Student experience</div>
+      <div class="logic-sub">Core · Enrichment · Intervention</div>
+      <div class="logic-cta">Explore →</div>
+    </div>
+    <div class="logic-box" onclick="showTab('elements')">
+      <div class="logic-title">School elements</div>
+      <div class="logic-sub">The major design levers</div>
+      <div class="logic-cta">Explore →</div>
+    </div>
+  </div>
+
+  <!-- Section 2: The Six Outcome Areas -->
+  <div class="section-label mt-section">The six outcome areas</div>
+  <div class="outcomes-grid">
+    <div class="outcome-card o1" onclick="showTab('outcomes');showDomain(1)"><div class="oc-num">1 <span class="ai-pill">AI</span></div><div class="oc-name">Foundations of AI Literacy</div><div class="oc-desc">Understand what AI is, how it works, and how to evaluate its outputs critically.</div><div class="oc-cta">Explore skills →</div></div>
+    <div class="outcome-card o2" onclick="showTab('outcomes');showDomain(2)"><div class="oc-num">2</div><div class="oc-name">Computational Thinking</div><div class="oc-desc">Approach complex problems systematically — decompose, recognize patterns, design solutions, work with data.</div><div class="oc-cta">Explore skills →</div></div>
+    <div class="outcome-card o3" onclick="showTab('outcomes');showDomain(3)"><div class="oc-num">3</div><div class="oc-name">Computer Science</div><div class="oc-desc">Harness computing power to create and critically analyze solutions in a world driven by data, algorithms, and AI.</div><div class="oc-cta">Explore skills →</div></div>
+    <div class="outcome-card o4" onclick="showTab('outcomes');showDomain(4)"><div class="oc-num">4 <span class="ai-pill">AI</span></div><div class="oc-name">Computing</div><div class="oc-desc">Navigate digital environments, select appropriate tools including AI systems, and manage information effectively.</div><div class="oc-cta">Explore skills →</div></div>
+    <div class="outcome-card o5" onclick="showTab('outcomes');showDomain(5)"><div class="oc-num">5</div><div class="oc-name">Digital Literacy</div><div class="oc-desc">Practice responsible digital citizenship, evaluate information critically, and understand technology's societal impact.</div><div class="oc-cta">Explore skills →</div></div>
+    <div class="outcome-card o6" onclick="showTab('outcomes');showDomain(6)"><div class="oc-num">6 <span class="ai-pill">AI</span></div><div class="oc-name">Career Learning</div><div class="oc-desc">Explore CS and AI careers, understand how automation transforms work, and develop professional collaboration skills.</div><div class="oc-cta">Explore skills →</div></div>
+  </div>
+  <div class="legend-row">
+    <div class="legend-item"><span class="ai-pill">AI</span> Domain with significant AI content</div>
+    <div class="legend-item">Skills progress across four levels: K–2 · 3–5 · 6–8 · 9–12</div>
+  </div>
+
+  <!-- Section 3: The Student Experience -->
+  <div class="section-label mt-section">The student experience</div>
+  <p class="intro-body">Extraordinary CS and AI learning requires six leaps away from industrial-era models, and three types of experience — core instruction, enrichment, and intervention — working together so every student is challenged, supported, and motivated.</p>
+
+  <p class="sub-label">Six leaps toward extraordinary learning</p>
+  <div class="leaps-grid">
+    <div class="leap-card lc-blue"   onclick="toggleLeap('whole',this)"><div class="lc-name">Whole-child focus</div><div class="lc-from">CS learning that builds identity, wellbeing, and belonging alongside technical skills</div></div>
+    <div class="leap-card lc-red"    onclick="toggleLeap('connect',this)"><div class="lc-name">Connection & community</div><div class="lc-from">Collaborative computing — pair programming, community problems, shared CS culture</div></div>
+    <div class="leap-card lc-blue"   onclick="toggleLeap('high',this)"><div class="lc-name">High expectations & rigor</div><div class="lc-from">Grade-level CS and AI access for every student, with rigorous thinking at the center</div></div>
+    <div class="leap-card lc-red"    onclick="toggleLeap('rel',this)"><div class="lc-name">Relevance</div><div class="lc-from">Real problems, real tools, real connections to students' lives and communities</div></div>
+    <div class="leap-card lc-blue"   onclick="toggleLeap('custom',this)"><div class="lc-name">Customization</div><div class="lc-from">Flexible pathways, scaffolded support, and multiple ways to show CS mastery</div></div>
+    <div class="leap-card lc-red"    onclick="toggleLeap('agency',this)"><div class="lc-name">Agency</div><div class="lc-from">Students as creators and problem-solvers — shaping technology, not just using it</div></div>
+  </div>
+  <div class="leap-detail" id="ld-whole"><span class="ld-tag ld-tag-blue">Whole-child focus</span><div class="ld-from">Instead of: Technical and applied CS skills with little attention to holistic well-being</div><div class="ld-body">Students develop CS and AI knowledge through kinesthetic activities, build emotional and social skills through digital citizenship and self-reflection, and experience safety, comfort, and privacy in online and in-person environments.</div></div>
+  <div class="leap-detail" id="ld-connect"><span class="ld-tag ld-tag-red">Connection & community</span><div class="ld-from">Instead of: Individual practice and competition</div><div class="ld-body">Students collaborate frequently with peers and community on CS challenges — coding projects, design challenges, community-based tech solutions. Every learner's identity is a strength. Perspectives are accepted, respected, and celebrated, especially across different ability levels.</div></div>
+  <div class="leap-detail" id="ld-high"><span class="ld-tag ld-tag-blue">High expectations & rigor</span><div class="ld-from">Instead of: Limited access for a select few, rote tasks, memorization</div><div class="ld-body">Every student — regardless of background or prior exposure — accesses high-quality CS and AI learning at grade level. Tasks demand rigorous thinking: analyzing data, recognizing patterns, synthesizing knowledge, and applying it in real-world contexts while maintaining critical judgment of AI outputs.</div></div>
+  <div class="leap-detail" id="ld-rel"><span class="ld-tag ld-tag-red">Relevance</span><div class="ld-from">Instead of: Standardized, hypothetical scenarios that "prepare" students for later</div><div class="ld-body">Students engage in meaningful tasks that build on their interests, use cutting-edge technology including AI, and connect to real-world problems now. Materials reflect their backgrounds, cultures, and communities. They experience how human creativity and technology shape current careers and society.</div></div>
+  <div class="leap-detail" id="ld-custom"><span class="ld-tag ld-tag-blue">Customization</span><div class="ld-from">Instead of: Standardized instruction regardless of need</div><div class="ld-body">Learning structures are flexible — how, when, where, and from whom students engage is based on what supports them best. Content is tailored to individual needs, interests, and goals. AI and computing tools provide scaffolds that get students unstuck faster. Multiple pathways exist to demonstrate mastery.</div></div>
+  <div class="leap-detail" id="ld-agency"><span class="ld-tag ld-tag-red">Agency</span><div class="ld-from">Instead of: Passive absorption of content</div><div class="ld-body">Students take ownership of their CS and AI learning — choosing how they learn, making personal connections, exploring technology's impact on society, and building socially responsible solutions. They document and share outputs, contribute to classroom and community dialogue, and take action to positively impact their communities.</div></div>
+
+  <p class="sub-label">Parts of the student experience</p>
+  <div class="band-grid mb-sm">
+    <div class="band-card"><div class="band-label">Core Instruction</div><div class="band-body">The primary grade-level experience for all students. Establishes the foundational knowledge and skills that enrichment and intervention build from.</div></div>
+    <div class="band-card"><div class="band-label">Enrichment</div><div class="band-body">Raises the ceiling — extending learning through deeper complexity, creativity, and authentic problem-solving that builds computing identity and motivation.</div></div>
+    <div class="band-card"><div class="band-label">Intervention</div><div class="band-body">Acts as a safety net — providing targeted additional support without replacing access to grade-level learning.</div></div>
+  </div>
+
+  <!-- Section 4: School Elements -->
+  <div class="section-label">School elements</div>
+  <p class="intro-body" style="margin-bottom:14px;">Every element of the school must be intentionally designed to shape the student experience and drive these outcomes.</p>
+  <div class="elements-grid">
+    <div class="elem-row" onclick="showTab('elements');showElement('curriculum')"><div class="elem-dot"></div>Curriculum, Instruction & Assessment<span class="elem-cta">→</span></div>
+    <div class="elem-row" onclick="showTab('elements');showElement('culture')"><div class="elem-dot"></div>School & Classroom Culture, Routines & Norms<span class="elem-cta">→</span></div>
+    <div class="elem-row" onclick="showTab('elements');showElement('time')"><div class="elem-dot"></div>Schedules & Use of Time<span class="elem-cta">→</span></div>
+    <div class="elem-row" onclick="showTab('elements');showElement('adults')"><div class="elem-dot"></div>Adult Roles, Hiring & Learning<span class="elem-cta">→</span></div>
+    <div class="elem-row" onclick="showTab('elements');showElement('tech')"><div class="elem-dot"></div>Technology & Tech Infrastructure<span class="elem-cta">→</span></div>
+    <div class="elem-row" onclick="showTab('elements');showElement('space')"><div class="elem-dot"></div>Space & Facilities<span class="elem-cta">→</span></div>
+    <div class="elem-row" onclick="showTab('elements');showElement('family')"><div class="elem-dot"></div>Family & Community Partnerships<span class="elem-cta">→</span></div>
+    <div class="elem-row" onclick="showTab('elements');showElement('budget')"><div class="elem-dot"></div>Budget & Operations<span class="elem-cta">→</span></div>
+    <div class="elem-row" onclick="showTab('elements');showElement('improvement')"><div class="elem-dot"></div>Continuous Learning & Improvement<span class="elem-cta">→</span></div>
+  </div>
+
+  <div class="page-footer"><strong>Transcend partners with communities to create and spread extraordinary learning for all.</strong></div>
+</div>
+
+<!-- 
+     TAB 2 — THE OPPORTUNITY
+ -->
+<div class="tab-panel" id="tab-opportunity">
+  <div class="print-bar">
+    <button class="btn-print" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>Print this tab</button>
+    <button class="btn-print btn-pdf" onclick="alert('PDF export coming soon. For now, use Print → Save as PDF in your browser.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Download PDF</button>
+    <button class="btn-print" onclick="alert('Slide presentation link coming soon.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>View as Slides</button>
+  </div>
+
+  <div class="eyebrow">Computational Literacy · Design Guidance</div>
+  <h1>The opportunity</h1>
+  <div class="rule"></div>
+
+  <p style="font-size:15px;color:#1A4C81;font-weight:700;line-height:1.75;margin-bottom:1rem;max-width:700px;">Today's students are entering a world where digital systems, artificial intelligence, and computational thinking shape nearly every aspect of life. Yet most K–12 computer science experiences remain narrowly focused on basic skills in ways that are disconnected from students' interests and futures.</p>
+  <p class="intro-body">The challenge before schools is not simply to "add CS and AI" to existing programs. It is to redesign learning so that young people can become capable, ethical, creative, and empowered participants in an AI-enabled world. The need for this has never been more urgent — or more achievable. Federal and state investments are growing. Public support is strong. Research on how students learn CS most effectively is sharpening. And the policy momentum is real. This is a rare alignment of opportunity that communities can't afford to miss. <a href="https://docs.google.com/document/d/1i8b7LgO-Ajc1D1Q3L7FC9HblN7Mcs4DY0nqtFm05FCk/edit?tab=t.d4hqi1ityffp" target="_blank" style="color:#1A4C81;font-weight:700;">Explore these trends and more →</a></p>
+
+  <div class="section-label">Where we stand</div>
+  <div class="opp-two-col">
+    <div class="opp-col-card opportunity">
+      <div class="opp-col-label">The opportunities are real</div>
+      <ul>
+        <li>Coordinated federal and state investment in CS and AI education — $88M+ in state budgets in 2024 alone</li>
+        <li>11 states now require CS credits for high school graduation</li>
+        <li>20 state departments of education have issued official AI guidance for K–12</li>
+        <li>65% of caregivers agree schools should teach students how to use AI</li>
+        <li>80%+ of teachers, caregivers, and students say AI has had a positive impact on education</li>
+        <li>Growing research consensus on what effective CS and AI learning looks like</li>
+        <li>CS and AI increasingly treated as connected disciplines rather than separate silos</li>
+      </ul>
+    </div>
+    <div class="opp-col-card challenge">
+      <div class="opp-col-label">The challenges are genuine</div>
+      <ul>
+        <li>Incomplete standards frameworks that combine CS and AI Literacy comprehensively</li>
+        <li>AI advancing faster than pedagogical knowledge and teacher preparation systems</li>
+        <li>CS lacks core subject status in most states — finding dedicated time is hard</li>
+        <li>Limited evidence of curriculum effectiveness makes informed choices difficult</li>
+        <li>Persistent access disparities by race, gender, geography, and school size</li>
+        <li>Only 48% of teachers feel equipped to teach AI; 88% need more PD resources</li>
+        <li>Rapid proliferation of AI tools without quality control or evaluation frameworks</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="sub-label" style="margin-top:1.5rem;">Research & trend evidence — click any theme to expand</p>
+
+  <div class="trend-section">
+    <div class="trend-header" onclick="toggleTrend('t1')">
+      <div class="trend-num">01</div>
+      <div class="trend-header-text">
+        <div class="trend-title">Public & Professional Will toward CS Education</div>
+        <div class="trend-headline">Educators, caregivers, and students all recognize the importance and value of computer science.</div>
+      </div>
+      <div class="trend-toggle" id="tt1">Show ↓</div>
+    </div>
+    <div class="trend-body" id="t1">
+      <div class="stat-row">80% of principals, 74% of superintendents, and 70% of teachers "strongly agree" or "agree" that people who do computer science make things that help improve people's lives. <span class="stat-source"><a href="https://services.google.com/fh/files/misc/computer-science-education-in-us-k12schools-2020-report.pdf" target="_blank">Gallup, 2020</a></span></div>
+      <div class="stat-row">69% of parents see strong value in CS for societal impact and career opportunities. Parents of Black students see more value (78%) than parents of Hispanic (67%) or white students (68%). <span class="stat-source"><a href="https://services.google.com/fh/files/misc/computer-science-education-in-us-k12schools-2020-report.pdf" target="_blank">Gallup, 2020</a></span></div>
+      <div class="stat-row">About <span class="stat-big">40%</span> of all students see learning computer science as important for them — including 42% of Black students, 40% of Hispanic students, and 39% of white students. <span class="stat-source"><a href="https://services.google.com/fh/files/misc/computer-science-education-in-us-k12schools-2020-report.pdf" target="_blank">Gallup, 2020</a></span></div>
+      <div class="stat-row">Students exposed to 5+ hours of CS per week are nearly 3x more likely to see it as very important (69%) compared to those with zero exposure (26%). <span class="stat-source"><a href="https://services.google.com/fh/files/misc/computer-science-education-in-us-k12schools-2020-report.pdf" target="_blank">Gallup, 2020</a></span></div>
+      <div class="stat-row">Computer science is among the top 4 subjects for both importance and favorite subject. Nearly 3-in-4 students view it as important, with two-thirds saying it will become more important in coming years. <span class="stat-source"><a href="https://csforall.org/csiseverything/white-paper/perceptions-of-computer-science-education" target="_blank">CSforAll, 2025</a></span></div>
+    </div>
+  </div>
+
+  <div class="trend-section">
+    <div class="trend-header" onclick="toggleTrend('t2')">
+      <div class="trend-num">02</div>
+      <div class="trend-header-text">
+        <div class="trend-title">K–12 AI Education</div>
+        <div class="trend-headline">CS teachers strongly support AI integration and request guidance; students recognize AI's importance but feel underprepared.</div>
+      </div>
+      <div class="trend-toggle" id="tt2">Show ↓</div>
+    </div>
+    <div class="trend-body" id="t2">
+      <div class="stat-row"><span class="stat-big">85%</span> of CS teachers believe using and learning about AI should be included in foundational CS experiences. 80% agree that CS standards should include AI. <span class="stat-source"><a href="https://www.teachai.org/media/the-role-of-ai-in-computer-science-education-results-from-a-teacher-survey-jge9xz" target="_blank">CSTA and Teach AI, 2024</a></span></div>
+      <div class="stat-row">74% of students (ages 12–17 across Europe) believe AI will play a significant role in their professional lives — but only 46% think their schools adequately prepare them for AI, and 49% worry AI could widen gaps in academic success. <span class="stat-source"><a href="https://ailiteracyframework.org/" target="_blank">European Commission, OECD & Code.org, 2025</a></span></div>
+      <div class="stat-row">76% of teachers agree AI can promote creativity in the classroom. CS teachers most commonly cite increasing learning opportunities, automating differentiation tasks, and preparing students for the digital world as key benefits. <span class="stat-source"><a href="https://www.teachai.org/media/the-role-of-ai-in-computer-science-education-results-from-a-teacher-survey-jge9xz" target="_blank">CSTA and Teach AI, 2024</a></span></div>
+      <div class="trend-quote">"Learning computer science is still crucial for students, even with the rise of AI. Understanding the principles behind coding and computational thinking not only enables students to create AI but also helps them grasp its limitations, ethical considerations, and potential social impacts."<cite>— Secondary CS Teacher, New York, USA (CSTA and Teach AI, 2024)</cite></div>
+    </div>
+  </div>
+
+  <div class="trend-section">
+    <div class="trend-header" onclick="toggleTrend('t3')">
+      <div class="trend-num">03</div>
+      <div class="trend-header-text">
+        <div class="trend-title">Access, Participation & Disparities in CS Education</div>
+        <div class="trend-headline">CS enrollment is growing — but access gaps by race, gender, and geography persist and demand attention.</div>
+      </div>
+      <div class="trend-toggle" id="tt3">Show ↓</div>
+    </div>
+    <div class="trend-body" id="t3">
+      <div class="stat-row">High school CS enrollment grew from 5.1% of students in 2020–21 to <span class="stat-big">6.4%</span> in 2023–24 — a 25% increase. States with at least six of Code.org's recommended policies average 70% of students taking foundational CS courses. <span class="stat-source"><a href="https://code.org/assets/advocacy/stateofcs/2024_state_of_cs.pdf" target="_blank">Code.org, 2024</a></span></div>
+      <div class="stat-row">State adoption of CS graduation requirements jumped <span class="stat-big">37.5%</span> in 2024, rising from 8 to 11 states. State funding for CS education has grown from 9 to 39 states since 2017. <span class="stat-source"><a href="https://code.org/assets/advocacy/stateofcs/2024_state_of_cs.pdf" target="_blank">Code.org, 2024</a></span></div>
+      <div class="stat-row">White and Asian students comprise 58% of CS participants while Black and Hispanic students remain underrepresented relative to their population sizes. Female enrollment has risen slightly but males still represent 67.5% of enrollment vs. 32.5% for females. <span class="stat-source"><a href="https://code.org/assets/advocacy/stateofcs/2024_state_of_cs.pdf" target="_blank">Code.org, 2024</a></span></div>
+      <div class="stat-row">Students from lower-income families, rural schools, and smaller schools have significantly less access. School size gaps are stark: 36% of the smallest schools offer CS vs. 93% of the largest. <span class="stat-source"><a href="https://code.org/assets/advocacy/stateofcs/2024_state_of_cs.pdf" target="_blank">Code.org, 2024</a></span></div>
+    </div>
+  </div>
+
+  <div class="trend-section">
+    <div class="trend-header" onclick="toggleTrend('t4')">
+      <div class="trend-num">04</div>
+      <div class="trend-header-text">
+        <div class="trend-title">CS Outcomes & Disparities</div>
+        <div class="trend-headline">Tech careers offer exceptional growth and pay — but achievement gaps at the AP level signal who currently has access to the pipeline.</div>
+      </div>
+      <div class="trend-toggle" id="tt4">Show ↓</div>
+    </div>
+    <div class="trend-body" id="t4">
+      <div class="stat-row">Tech salaries are about <span class="stat-big">127%</span> higher than the national 50th percentile. Tech occupation employment over the next 10 years is expected to grow at roughly twice the rate of overall employment — with Data Scientists projected to grow 414%. <span class="stat-source"><a href="https://www.comptia.org/en-us/resources/research/state-of-the-tech-workforce-2025/" target="_blank">CompTIA, 2025</a></span></div>
+      <div class="stat-row">AP Computer Science Principles shows racial gaps: Asian students pass at 78%, white students at 69%, Black students at 33%, and Native Hawaiian students at 40% — despite the course being designed to broaden participation. <span class="stat-source"><a href="https://code.org/assets/advocacy/stateofcs/2024_state_of_cs.pdf" target="_blank">Code.org, 2024</a></span></div>
+      <div class="stat-row">AP Computer Science A: Asian students achieve passing scores at more than double the rate of Black students (75% vs. 36%). Males outperform females (68% vs. 63%). <span class="stat-source"><a href="https://code.org/assets/advocacy/stateofcs/2024_state_of_cs.pdf" target="_blank">Code.org, 2024</a></span></div>
+    </div>
+  </div>
+
+  <div class="trend-section">
+    <div class="trend-header" onclick="toggleTrend('t5')">
+      <div class="trend-num">05</div>
+      <div class="trend-header-text">
+        <div class="trend-title">Structural & Systemic Barriers to CS Education</div>
+        <div class="trend-headline">Funding and teacher preparation are the most-cited levers — and the most underdeveloped.</div>
+      </div>
+      <div class="trend-toggle" id="tt5">Show ↓</div>
+    </div>
+    <div class="trend-body" id="t5">
+      <div class="stat-row">School leaders cite funding (34–36%) and career exposure (23–30%) as the top things businesses could do to increase access to high-quality CS education. <span class="stat-source"><a href="https://services.google.com/fh/files/misc/computer-science-education-in-us-k12schools-2020-report.pdf" target="_blank">Gallup, 2020</a></span></div>
+      <div class="stat-row">Only <span class="stat-big">48%</span> of teachers currently feel equipped to teach AI. <span class="stat-big">88%</span> need more professional learning resources. The most requested PD topics: how AI works, how to use AI tools, and the ethical impacts of AI. <span class="stat-source"><a href="https://www.teachai.org/media/the-role-of-ai-in-computer-science-education-results-from-a-teacher-survey-jge9xz" target="_blank">CSTA and Teach AI, 2024</a></span></div>
+      <div class="stat-row">The field lacks vetted, comprehensive K–12 AI curricula aligned with emerging standards. Most available AI resources are short modules rather than comprehensive curricula. No established rubrics exist for evaluating pedagogical quality, alignment, or equity features. <span class="stat-source"><a href="https://code.org/assets/advocacy/stateofcs/2024_state_of_cs.pdf" target="_blank">Code.org, 2024</a></span></div>
+    </div>
+  </div>
+
+  <div class="trend-section">
+    <div class="trend-header" onclick="toggleTrend('t6')">
+      <div class="trend-num">06</div>
+      <div class="trend-header-text">
+        <div class="trend-title">Future Trends & Emerging Innovations in CS Education</div>
+        <div class="trend-headline">Teachers are optimistic about AI in CS — and advocates for curriculum that evolves without abandoning fundamentals.</div>
+      </div>
+      <div class="trend-toggle" id="tt6">Show ↓</div>
+    </div>
+    <div class="trend-body" id="t6">
+      <div class="stat-row"><span class="stat-big">52%</span> of CS teachers see AI's benefits as outweighing its risks; 43% see equal benefits and risks. Top concerns: overreliance, plagiarism, and widening access gaps. <span class="stat-source"><a href="https://www.teachai.org/media/the-role-of-ai-in-computer-science-education-results-from-a-teacher-survey-jge9xz" target="_blank">CSTA and Teach AI, 2024</a></span></div>
+      <div class="stat-row">Teachers advocate for curriculum evolution that maintains fundamental programming skills while incorporating AI-relevant topics and societal impact discussions in foundational CS courses. <span class="stat-source"><a href="https://www.teachai.org/media/the-role-of-ai-in-computer-science-education-results-from-a-teacher-survey-jge9xz" target="_blank">CSTA and Teach AI, 2024</a></span></div>
+      <div class="stat-row">Texas leads the nation in tech job creation (8,181 new positions) with the second-largest tech workforce (972,747 jobs). Dallas ranks #2 nationally in absolute tech employment (378,945 jobs); Austin's tech sector represents 22% of its local economy (#4 nationally). <span class="stat-source"><a href="https://www.comptia.org/en-us/resources/research/state-of-the-tech-workforce-2025/" target="_blank">CompTIA, 2025</a></span></div>
+      <div class="stat-row">Foundational CS access in Texas increased to 56% of public high schools by 2023 — but gaps persist by geography (50–73%) and school size (36–93%). Male students participate at nearly a 3:1 ratio compared to females (72% vs. 28%). <span class="stat-source"><a href="https://code.org/assets/advocacy/stateofcs/2024_state_of_cs.pdf" target="_blank">Code.org, 2024</a></span></div>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top:2rem;">Call to action</div>
+  <p style="font-size:15px;color:#1A4C81;font-weight:700;line-height:1.75;margin-bottom:1rem;max-width:700px;">Computer science is no longer a niche discipline reserved for a select few careers. It is a foundational literacy — a new medium for thinking, designing, creating, and solving problems across every domain of human life. And importantly, it includes the nascent study and use of artificial intelligence.</p>
+  <p class="intro-body" style="margin-bottom:1.5rem;max-width:700px;">Meeting this moment requires more than adding a coding class. It calls for a shared definition of rigorous outcomes and a coherent redesign of CS and AI learning experiences — redesigning outcomes, the student experience, and the school elements that make both possible.</p>
+  <div class="btn-row" style="margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid #dde3ec;">
+    <span onclick="showTab('outcomes')" class="btn primary">Explore the outcomes →</span>
+    <span onclick="showTab('experience')" class="btn">See the student experience →</span>
+    <span onclick="showTab('elements')" class="btn">Review school elements →</span>
+  </div>
+
+
+
+  <div class="page-footer"><strong>Transcend partners with communities to create and spread extraordinary learning for all.</strong><br>Sources: Gallup (2020), Code.org (2024), CSTA and Teach AI (2024), CompTIA (2025), CSforAll (2025), European Commission/OECD/Code.org (2025).</div>
+</div>
+
+<!-- 
+     TAB 3 — OUTCOMES
+ -->
+<div class="tab-panel" id="tab-outcomes">
+  <div class="print-bar">
+    <button class="btn-print" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>Print this tab</button>
+    <button class="btn-print btn-pdf" onclick="alert('PDF export coming soon. For now, use Print → Save as PDF in your browser.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Download PDF</button>
+    <button class="btn-print" onclick="alert('Slide presentation link coming soon.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>View as Slides</button>
+  </div>
+  <div class="eyebrow">Computational Literacy · Design Guidance</div>
+  <h1>Learning outcome domains</h1>
+  <div class="rule"></div>
+  <p class="intro">Six domains define what K–12 students need to know and be able to do. Select any domain to see why it matters, how it connects to the leaps, and the full knowledge and skills with level progressions.</p>
+
+  <div class="domain-tabs">
+    <div class="domain-tab active" onclick="showDomain(1)">1 · AI Literacy <span class="tab-ai">AI</span></div>
+    <div class="domain-tab" onclick="showDomain(2)">2 · Computational Thinking</div>
+    <div class="domain-tab" onclick="showDomain(3)">3 · Computer Science</div>
+    <div class="domain-tab" onclick="showDomain(4)">4 · Computing <span class="tab-ai">AI</span></div>
+    <div class="domain-tab" onclick="showDomain(5)">5 · Digital Literacy</div>
+    <div class="domain-tab" onclick="showDomain(6)">6 · Career Learning <span class="tab-ai">AI</span></div>
+  </div>
+
+  <div class="domain-panel active" id="dp-1">
+    <div class="dp-header"><div class="dp-num">1</div><div><div class="dp-title">Foundations of Artificial Intelligence Literacy</div><div class="dp-desc">Knowledge and skills to understand what AI is, how it works, recognize its presence and influence, evaluate AI outputs critically, and distinguish between human and AI capabilities.</div></div></div>
+    <div class="dp-why"><div class="dp-why-label">Why this domain matters</div>AI systems now shape decisions in hiring, healthcare, education, and civic life. Students who cannot recognize AI, evaluate its outputs, or understand its limitations are not positioned to participate fully as citizens or workers. This domain builds the foundational literacy every student needs — regardless of whether they pursue computing as a career.</div>
+    <div class="dp-leaps"><div class="dp-leaps-label">Connects most directly to these leaps</div><div class="leap-chips"><span class="leap-chip chip-blue">High expectations & rigor</span><span class="leap-chip chip-blue">Agency</span><span class="leap-chip chip-blue">Relevance</span></div></div>
+    <table class="skills-table"><thead><tr><th>Code</th><th>Knowledge & Skill</th><th>What students learn to do</th></tr></thead><tbody>
+      <tr><td class="skill-code">1.1</td><td><span class="skill-name">Understanding AI Systems</span> <span class="ai-mark"></span></td><td>Comprehend AI capabilities, limitations, and how AI systems operate — including machine learning, training data, and pattern recognition.</td></tr>
+      <tr><td class="skill-code">1.2</td><td><span class="skill-name">Evaluating AI Outputs</span> <span class="ai-mark"></span></td><td>Critically assess AI-generated content and predictions for bias, accuracy, appropriateness, and potential harms, including understanding AI regulatory frameworks.</td></tr>
+      <tr><td class="skill-code">1.3</td><td><span class="skill-name">Human vs. AI Capabilities</span> <span class="ai-mark"></span></td><td>Distinguish between activities humans do well and those AI systems do well, understand differences in how each learns, and determine appropriate human involvement in AI-driven systems.</td></tr>
+    </tbody></table>
+    <details class="skills-expander"><summary>See level progressions (K–2 through 9–12)</summary>
+      <div class="level-subhead-group">
+        <div class="level-subhead">1.1 Understanding AI Systems</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Identify that some devices use AI; describe what AI does in simple terms.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Explain how AI learns from data and identify AI in everyday tools like recommendations and voice assistants.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Describe machine learning, training data, and model limitations; investigate an AI system's behavior.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Train, test, and evaluate AI models; analyze how data choices affect outcomes, fairness, and accuracy.</div></div>
+        </div>
+        <div class="level-subhead">1.2 Evaluating AI Outputs</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Ask whether AI-generated content seems correct or makes sense.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Compare AI outputs with known information; identify when AI is and isn't appropriate to use.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Systematically evaluate outputs for bias, accuracy, and limitations; experiment with prompts to understand AI behavior.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Conduct comprehensive evaluations including bias analysis, fairness across demographic groups, and ethical implications.</div></div>
+        </div>
+        <div class="level-subhead">1.3 Human vs. AI Capabilities</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Sort activities by whether humans or computers do them better.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Compare AI and human strengths; explain why certain tasks require human judgment.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Contrast how humans and AI each learn; evaluate when human expertise is essential vs. when AI augments.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Design systems that preserve meaningful human control; ensure oversight in critical AI-driven decisions.</div></div>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="domain-panel" id="dp-2">
+    <div class="dp-header"><div class="dp-num">2</div><div><div class="dp-title">Computational Thinking</div><div class="dp-desc">Knowledge and skills to collaboratively approach complex problems systematically — breaking them down, identifying patterns, extracting essential information, developing step-by-step solutions, and analyzing data to drive informed decisions.</div></div></div>
+    <div class="dp-why"><div class="dp-why-label">Why this domain matters</div>Computational thinking is the problem-solving engine underneath all of CS and AI. Research shows it transfers across disciplines — students with strong CT skills approach challenges in science, math, and humanities more effectively. It is the rigorous technical foundation that makes the other domains meaningful.</div>
+    <div class="dp-leaps"><div class="dp-leaps-label">Connects most directly to these leaps</div><div class="leap-chips"><span class="leap-chip chip-blue">High expectations & rigor</span><span class="leap-chip chip-blue">Relevance</span><span class="leap-chip chip-blue">Connection & community</span></div></div>
+    <table class="skills-table"><thead><tr><th>Code</th><th>Knowledge & Skill</th><th>What students learn to do</th></tr></thead><tbody>
+      <tr><td class="skill-code">2.1</td><td><span class="skill-name">Problem Decomposition</span></td><td>Break complex problems into manageable components and create modular solutions that can be developed and tested independently.</td></tr>
+      <tr><td class="skill-code">2.2</td><td><span class="skill-name">Pattern Recognition & Analysis</span> <span class="ai-mark"></span></td><td>Identify patterns and trends in data, sequences, and problems to develop general solutions and make informed predictions.</td></tr>
+      <tr><td class="skill-code">2.3</td><td><span class="skill-name">Abstraction & Generalization</span> <span class="ai-mark"></span></td><td>Extract essential information, ignore irrelevant details, create models that capture key characteristics, and develop generalizable solutions.</td></tr>
+      <tr><td class="skill-code">2.4</td><td><span class="skill-name">Algorithm Design & Optimization</span> <span class="ai-mark"></span></td><td>Develop and refine step-by-step solutions, compare algorithmic approaches, and optimize for efficiency and specific constraints.</td></tr>
+      <tr><td class="skill-code">2.5</td><td><span class="skill-name">Data-Driven Problem Solving</span> <span class="ai-mark"></span></td><td>Use data to inform decisions — including collection, quality assurance, validation, handling missing data, and analyzing variability.</td></tr>
+      <tr><td class="skill-code">2.6</td><td><span class="skill-name">Data Investigation & Inquiry</span></td><td>Formulate answerable research questions, design investigations, and distinguish data-answerable from non-data-answerable questions.</td></tr>
+      <tr><td class="skill-code">2.7</td><td><span class="skill-name">Creativity & Design Thinking</span> <span class="ai-mark"></span></td><td>Apply creative problem-solving approaches, design thinking processes, and innovation methodologies to generate novel computing solutions.</td></tr>
+    </tbody></table>
+    <details class="skills-expander"><summary>See level progressions (K–2 through 9–12)</summary>
+      <div class="level-subhead-group">
+        <div class="level-subhead">2.1 Problem Decomposition</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Break a simple task (like making a sandwich) into ordered steps; identify the parts of a familiar problem.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Decompose a multi-step problem into sub-tasks; explain how solving smaller parts contributes to the whole.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Break complex programming challenges into modular components; use functions and procedures to manage complexity.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Design systems using modular decomposition; evaluate tradeoffs in how a problem is broken down for efficiency and reuse.</div></div>
+        </div>
+        <div class="level-subhead">2.2–2.3 Pattern Recognition & Abstraction</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Identify repeating patterns in sequences, shapes, or routines; sort objects by shared properties.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Recognize patterns in data and code; identify what information is essential vs. irrelevant for solving a problem.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Generalize patterns to create reusable solutions; build abstract models that capture key features of a system.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Develop generalizable algorithms from patterns; evaluate the appropriateness of an abstraction for a given context.</div></div>
+        </div>
+        <div class="level-subhead">2.4 Algorithm Design</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Create and follow simple step-by-step instructions; recognize that order matters in a sequence.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Write and trace algorithms with conditionals and loops; compare different approaches for solving the same problem.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Design and refine algorithms; analyze efficiency and identify ways to optimize for speed or clarity.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Analyze algorithmic complexity; compare sorting, searching, and other algorithms for real-world constraints.</div></div>
+        </div>
+        <div class="level-subhead">2.5–2.6 Data Problem Solving & Inquiry</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Collect and organize simple data (e.g., class survey); answer basic questions from charts or tables.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Formulate questions answerable with data; collect, clean, and represent data to identify trends.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Design data investigations; evaluate data quality and variability; distinguish correlation from causation.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Conduct multi-variable investigations; apply statistical reasoning; assess bias and validity of data sources.</div></div>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="domain-panel" id="dp-3">
+    <div class="dp-header"><div class="dp-num">3</div><div><div class="dp-title">Computer Science</div><div class="dp-desc">Knowledge and skills to harness computing power for complex problem-solving, innovation, and digital landscape shaping — enabling the creation and critical analysis of solutions in a world driven by data, algorithms, and AI systems.</div></div></div>
+    <div class="dp-why"><div class="dp-why-label">Why this domain matters</div>Computer Science is the technical core — writing and debugging code, understanding systems, working with data structures, and building real products. It is the domain most associated with the CS career pipeline, and also where access inequities are sharpest. Rigorous, high-quality CS education for every student is a matter of equity.</div>
+    <div class="dp-leaps"><div class="dp-leaps-label">Connects most directly to these leaps</div><div class="leap-chips"><span class="leap-chip chip-blue">High expectations & rigor</span><span class="leap-chip chip-blue">Whole-child focus</span><span class="leap-chip chip-blue">Agency</span></div></div>
+    <table class="skills-table"><thead><tr><th>Code</th><th>Knowledge & Skill</th><th>What students learn to do</th></tr></thead><tbody>
+      <tr><td class="skill-code">3.1</td><td><span class="skill-name">Data Structures & Data Science</span> <span class="ai-mark"></span></td><td>Understand data structures and data science methodologies — exploratory analysis, data acquisition and transformation for AI, model evaluation, and handling variability.</td></tr>
+      <tr><td class="skill-code">3.2</td><td><span class="skill-name">Programming & Software Development</span></td><td>Write, debug, and maintain code — including collaborative coding, version control, peer review, and software engineering principles.</td></tr>
+      <tr><td class="skill-code">3.3</td><td><span class="skill-name">Algorithm Development & Analysis</span></td><td>Design, implement, and analyze algorithms — including mathematical expressions, operators, and formal complexity analysis.</td></tr>
+      <tr><td class="skill-code">3.4</td><td><span class="skill-name">Testing, Evaluation & Documentation</span></td><td>Test software systematically, conduct usability testing, and document code and datasets for clarity and reproducibility.</td></tr>
+      <tr><td class="skill-code">3.5</td><td><span class="skill-name">Systems & Architecture</span> <span class="ai-mark"></span></td><td>Understand computer systems, networks, software architecture, and how hardware and software interact.</td></tr>
+      <tr><td class="skill-code">3.6</td><td><span class="skill-name">Data Fundamentals & Representation</span> <span class="ai-mark"></span></td><td>Understand data types, number systems, data representation, metadata, and precision effects.</td></tr>
+      <tr><td class="skill-code">3.7</td><td><span class="skill-name">Physical Computing & Hardware</span></td><td>Design and develop physical computing solutions using microcontrollers, sensors, and IoT devices through engineering design processes.</td></tr>
+      <tr><td class="skill-code">3.8</td><td><span class="skill-name">Interactive Systems & Game Development</span> <span class="ai-mark"></span></td><td>Design game mechanics, develop interactive experiences, implement NPC behavior, and create engaging user interactions.</td></tr>
+    </tbody></table>
+    <details class="skills-expander"><summary>See level progressions (K–2 through 9–12)</summary>
+      <div class="level-subhead-group">
+        <div class="level-subhead">3.2 Programming & Software Development</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Use block-based coding to create simple sequences and animations; predict what a program will do.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Write programs with loops, conditionals, and events; debug errors by tracing code step by step.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Use text-based languages to write functions and handle data; apply version control and collaborative coding practices.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Develop multi-component software projects; apply software engineering principles, code review, and documentation standards.</div></div>
+        </div>
+        <div class="level-subhead">3.1 & 3.6 Data Structures & Representation</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Recognize that computers store information; organize data into simple lists or categories.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Use variables and simple data types; understand how information is represented digitally (binary, pixels).</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Work with arrays, lists, and dictionaries; collect and transform data for analysis or AI applications.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Implement and evaluate complex data structures; understand tradeoffs in data storage and retrieval for real-world systems.</div></div>
+        </div>
+        <div class="level-subhead">3.5 Systems & Architecture</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Identify parts of a computer and what they do; understand that devices communicate with each other.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Explain how hardware and software work together; describe how the internet connects devices.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Understand network protocols and client-server models; trace how data moves through a system.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Analyze software architecture patterns; evaluate system design decisions for scalability, security, and performance.</div></div>
+        </div>
+        <div class="level-subhead">3.4 Testing & Documentation</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Test a program to see if it works; describe what a program does in simple terms.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Identify and fix bugs systematically; add comments to code to explain its purpose.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Write test cases for specific scenarios; document functions and datasets for a peer audience.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Conduct systematic usability and unit testing; produce professional-quality documentation for code and systems.</div></div>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="domain-panel" id="dp-4">
+    <div class="dp-header"><div class="dp-num">4</div><div><div class="dp-title">Computing</div><div class="dp-desc">Knowledge and skills to navigate and utilize digital environments, select and use appropriate digital tools including AI systems, efficiently manage information, solve common technical issues, and leverage computer systems to enhance productivity.</div></div></div>
+    <div class="dp-why"><div class="dp-why-label">Why this domain matters</div>Computing is the everyday layer — the skills students use to function effectively in digital environments and work productively with AI tools. It bridges the technical (CS) with the practical (Digital Literacy), ensuring students are not just consumers of technology but intentional, capable operators of it.</div>
+    <div class="dp-leaps"><div class="dp-leaps-label">Connects most directly to these leaps</div><div class="leap-chips"><span class="leap-chip chip-blue">Customization</span><span class="leap-chip chip-blue">Relevance</span><span class="leap-chip chip-blue">Agency</span></div></div>
+    <table class="skills-table"><thead><tr><th>Code</th><th>Knowledge & Skill</th><th>What students learn to do</th></tr></thead><tbody>
+      <tr><td class="skill-code">4.1</td><td><span class="skill-name">Foundational Computing Skills</span></td><td>Navigate digital environments effectively — ergonomics, keyboarding, workspace organization, and physical health considerations.</td></tr>
+      <tr><td class="skill-code">4.2</td><td><span class="skill-name">Digital Tool Selection & Usage</span> <span class="ai-mark"></span></td><td>Select, compare, and use appropriate digital tools for specific tasks — understanding when computing technologies are and are not appropriate.</td></tr>
+      <tr><td class="skill-code">4.3</td><td><span class="skill-name">AI Tool Management & Prompting</span> <span class="ai-mark"></span></td><td>Effectively interact with AI tools through prompt engineering, experiment with different approaches, evaluate AI outputs, and integrate AI into workflows appropriately.</td></tr>
+      <tr><td class="skill-code">4.4</td><td><span class="skill-name">Information Management & Problem-Solving</span></td><td>Manage files, troubleshoot technical issues, and apply search strategies including keywords, Boolean operators, and limiters.</td></tr>
+    </tbody></table>
+    <details class="skills-expander"><summary>See level progressions (K–2 through 9–12)</summary>
+      <div class="level-subhead-group">
+        <div class="level-subhead">4.1 Foundational Computing Skills</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Use a mouse, keyboard, and touchscreen to interact with devices; practice proper posture and basic device care.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Navigate operating systems, manage files and folders, and build keyboarding fluency for productive work.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Use productivity tools efficiently across platforms; apply ergonomic principles and manage digital health intentionally.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Configure and troubleshoot complex digital environments; adapt to new platforms and tools rapidly and independently.</div></div>
+        </div>
+        <div class="level-subhead">4.2–4.3 Tool Selection & AI Prompting</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Choose between simple digital tools for a given task; recognize that some tools are better suited than others.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Compare digital tools for a purpose; use AI tools with teacher guidance and evaluate their outputs for accuracy.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Select and justify tool choices for complex tasks; craft and refine prompts to improve AI outputs; identify when AI is and is not appropriate.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Integrate AI tools into professional workflows; evaluate tool limitations, data privacy implications, and long-term tradeoffs.</div></div>
+        </div>
+        <div class="level-subhead">4.4 Information Management</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Save and retrieve files; use basic search to find information online with adult guidance.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Organize digital files; apply keyword and Boolean search strategies to find credible information.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Manage files across cloud and local systems; troubleshoot common technical problems independently using logical steps.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Design personal information management systems; apply advanced search and research strategies across multiple platforms.</div></div>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="domain-panel" id="dp-5">
+    <div class="dp-header"><div class="dp-num">5</div><div><div class="dp-title">Digital Literacy</div><div class="dp-desc">Knowledge and skills to practice responsible digital citizenship, understand ethical implications of technology and AI, critically evaluate information and media for credibility and bias, analyze technology's impact on society, and respect intellectual property and digital rights.</div></div></div>
+    <div class="dp-why"><div class="dp-why-label">Why this domain matters</div>Digital literacy is the civic and ethical dimension of computing education. As AI amplifies both the reach and the risks of digital systems, students need robust skills to evaluate what they encounter, protect themselves and others, and engage responsibly as active participants in a technology-shaped society.</div>
+    <div class="dp-leaps"><div class="dp-leaps-label">Connects most directly to these leaps</div><div class="leap-chips"><span class="leap-chip chip-blue">Whole-child focus</span><span class="leap-chip chip-blue">Connection & community</span><span class="leap-chip chip-blue">Agency</span></div></div>
+    <table class="skills-table"><thead><tr><th>Code</th><th>Knowledge & Skill</th><th>What students learn to do</th></tr></thead><tbody>
+      <tr><td class="skill-code">5.1</td><td><span class="skill-name">Digital Citizenship & Responsibility</span></td><td>Practice responsible online behavior — protecting privacy, managing digital footprint, demonstrating appropriate etiquette, and responding to cyberbullying and online harm.</td></tr>
+      <tr><td class="skill-code">5.2</td><td><span class="skill-name">Ethical Technology Use & AI Ethics</span> <span class="ai-mark"></span></td><td>Understand ethical implications of technology — benefits and risks, data collection impacts, intended and unintended consequences, and human choices in design, deployment, and regulation.</td></tr>
+      <tr><td class="skill-code">5.3</td><td><span class="skill-name">Technology's Impact & Critical Evaluation</span> <span class="ai-mark"></span></td><td>Analyze technology's societal impact — historical trajectories, social/political/environmental/economic linkages, emerging technologies, access inequities, and diverse contributions to computing history.</td></tr>
+      <tr><td class="skill-code">5.4</td><td><span class="skill-name">Intellectual Property & Legal Issues</span> <span class="ai-mark"></span></td><td>Understand copyright, fair use, Creative Commons, and digital rights — including proper attribution, citation practices, licensing, and legal implications of digital content use.</td></tr>
+    </tbody></table>
+    <details class="skills-expander"><summary>See level progressions (K–2 through 9–12)</summary>
+      <div class="level-subhead-group">
+        <div class="level-subhead">5.1 Digital Citizenship & Responsibility</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Practice kind and safe online behavior; understand that personal information should be kept private.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Manage a digital footprint; respond appropriately to cyberbullying; practice responsible use of school devices and accounts.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Analyze the long-term impact of online actions; evaluate privacy settings and data-sharing decisions critically.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Advocate for digital rights; design responsible digital practices for communities and organizations.</div></div>
+        </div>
+        <div class="level-subhead">5.2 Ethical Technology Use & AI Ethics</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Identify fair and unfair uses of technology; recognize that technology is made by people and can reflect their choices.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Discuss benefits and risks of technology; understand that data collected about people can affect them.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Analyze ethical implications of AI systems; evaluate unintended consequences of design and deployment decisions.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Evaluate regulatory frameworks for AI; propose ethical guidelines for emerging technologies in specific contexts.</div></div>
+        </div>
+        <div class="level-subhead">5.3 Technology's Societal Impact</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Identify ways technology helps people in everyday life; name diverse people who create and use technology.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Explore how technology has changed communities over time; identify access disparities in technology use.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Analyze social, environmental, and economic impacts of technology; evaluate who benefits and who is harmed by specific technologies.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Assess the systemic impact of emerging technologies on equity and society; develop informed positions on technology policy.</div></div>
+        </div>
+        <div class="level-subhead">5.4 Intellectual Property & Legal Issues</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Understand that creative work belongs to its creator; give credit when using others' ideas or images.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Distinguish between original work, fair use, and copying; cite sources and use Creative Commons resources appropriately.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Apply copyright and licensing rules in digital projects; evaluate the legal and ethical implications of AI-generated content.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Analyze intellectual property law in technology contexts; evaluate evolving legal frameworks for AI-generated works and data use.</div></div>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="domain-panel" id="dp-6">
+    <div class="dp-header"><div class="dp-num">6</div><div><div class="dp-title">Career Learning</div><div class="dp-desc">Knowledge and skills to explore computing and AI careers across diverse fields, understand how automation and AI transform work including job displacement and creation, and develop professional collaboration and teamwork skills for working effectively in diverse technology teams.</div></div></div>
+    <div class="dp-why"><div class="dp-why-label">Why this domain matters</div>Career connections increase student motivation, broaden participation from underrepresented groups, and prepare students for workforce realities. Students from communities historically excluded from tech benefit most from seeing diverse CS careers made visible and accessible, with clear connections between school and work.</div>
+    <div class="dp-leaps"><div class="dp-leaps-label">Connects most directly to these leaps</div><div class="leap-chips"><span class="leap-chip chip-blue">Relevance</span><span class="leap-chip chip-blue">Connection & community</span><span class="leap-chip chip-blue">Agency</span></div></div>
+    <table class="skills-table"><thead><tr><th>Code</th><th>Knowledge & Skill</th><th>What students learn to do</th></tr></thead><tbody>
+      <tr><td class="skill-code">6.1</td><td><span class="skill-name">Career Exploration & AI's Impact on Work</span> <span class="ai-mark"></span></td><td>Explore computing careers across diverse fields, understand how computing integrates with other disciplines, and analyze how automation and AI change the nature of work — including job displacement, creation, and reskilling needs.</td></tr>
+      <tr><td class="skill-code">6.2</td><td><span class="skill-name">Teamwork & Collaboration Skills</span> <span class="ai-mark"></span></td><td>Develop professional collaboration skills — working effectively in diverse teams, inclusive practices, project management, role definition, and using collaborative tools and version control.</td></tr>
+    </tbody></table>
+    <details class="skills-expander"><summary>See level progressions (K–2 through 9–12)</summary>
+      <div class="level-subhead-group">
+        <div class="level-subhead">6.1 Career Exploration & AI's Impact on Work</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Name jobs that use computers and technology; understand that people who make apps and games use computing skills.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Explore how computing connects to careers across fields (healthcare, art, science, sports); identify how AI is changing everyday jobs.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Research specific computing career pathways; analyze how automation is displacing and creating jobs across industries.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Evaluate workforce trends driven by AI; develop a plan for continuing learning and adaptability in a technology-shaped economy.</div></div>
+        </div>
+        <div class="level-subhead">6.2 Teamwork & Collaboration Skills</div>
+        <div class="level-grid">
+          <div class="level-card"><div class="level-label">Level 1</div><div class="level-grade">K–2</div><div class="level-body">Work with a partner on a simple coding or design task; take turns and share roles.</div></div>
+          <div class="level-card"><div class="level-label">Level 2</div><div class="level-grade">3–5</div><div class="level-body">Collaborate on group projects with defined roles; give and receive constructive feedback on each other's work.</div></div>
+          <div class="level-card"><div class="level-label">Level 3</div><div class="level-grade">6–8</div><div class="level-body">Use collaborative tools (shared docs, version control, project boards) to coordinate team work; practice inclusive team norms.</div></div>
+          <div class="level-card"><div class="level-label">Level 4</div><div class="level-grade">9–12</div><div class="level-body">Lead and contribute to diverse professional teams; apply project management frameworks and resolve conflict productively.</div></div>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="page-footer"><strong>Transcend partners with communities to create and spread extraordinary learning for all.</strong><br> marks AI-related knowledge and skill areas. Skills progress across four levels: K–2 (Level 1), 3–5 (Level 2), 6–8 (Level 3), 9–12 (Level 4).</div>
+</div>
+
+<!-- 
+     TAB 3 — STUDENT EXPERIENCE
+ -->
+<div class="tab-panel" id="tab-experience">
+  <div class="print-bar">
+    <button class="btn-print" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>Print this tab</button>
+    <button class="btn-print btn-pdf" onclick="alert('PDF export coming soon. For now, use Print → Save as PDF in your browser.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Download PDF</button>
+    <button class="btn-print" onclick="alert('Slide presentation link coming soon.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>View as Slides</button>
+  </div>
+  <div class="eyebrow">Computational Literacy · Design Guidance</div>
+  <h1>The student experience</h1>
+  <div class="rule"></div>
+  <p class="intro">Effective Computational Literacy programs require three essential parts working together. Each serves a distinct function, and together they ensure every student has access to rigorous, supportive, and enriching computing education.</p>
+
+  <!-- Leaps carousel -->
+  <div class="section-label">Six leaps toward extraordinary learning — click any to expand</div>
+  <div class="leaps-carousel-wrap">
+    <div class="leaps-carousel-nav">
+      <div class="carousel-track" id="carousel-track">
+        <div class="carousel-card active" onclick="toggleCarouselLeap('cl1', this)" data-index="0">
+          <div class="cc-leap-num">01</div>
+          <div class="cc-leap-name">Whole-child focus</div>
+          <div class="cc-leap-from">From: narrow skill focus</div>
+        </div>
+        <div class="carousel-card" onclick="toggleCarouselLeap('cl2', this)" data-index="1">
+          <div class="cc-leap-num">02</div>
+          <div class="cc-leap-name">Connection & community</div>
+          <div class="cc-leap-from">From: isolation & conformity</div>
+        </div>
+        <div class="carousel-card" onclick="toggleCarouselLeap('cl3', this)" data-index="2">
+          <div class="cc-leap-num">03</div>
+          <div class="cc-leap-name">High expectations & rigor</div>
+          <div class="cc-leap-from">From: surface-level access</div>
+        </div>
+        <div class="carousel-card" onclick="toggleCarouselLeap('cl4', this)" data-index="3">
+          <div class="cc-leap-num">04</div>
+          <div class="cc-leap-name">Relevance</div>
+          <div class="cc-leap-from">From: hypothetical scenarios</div>
+        </div>
+        <div class="carousel-card" onclick="toggleCarouselLeap('cl5', this)" data-index="4">
+          <div class="cc-leap-num">05</div>
+          <div class="cc-leap-name">Customization</div>
+          <div class="cc-leap-from">From: one-size-fits-all</div>
+        </div>
+        <div class="carousel-card" onclick="toggleCarouselLeap('cl6', this)" data-index="5">
+          <div class="cc-leap-num">06</div>
+          <div class="cc-leap-name">Agency</div>
+          <div class="cc-leap-from">From: passive compliance</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="leap-carousel-detail" id="cl1">
+    <span class="lcd-tag">Whole-child focus</span>
+    <div class="lcd-cols">
+      <div class="lcd-col">
+        <div class="lcd-col-label">Industrial-era learning</div>
+        <div class="lcd-col-title">Narrow Focus</div>
+        <p style="font-size:13px;color:#666;line-height:1.65;">Learners engage mostly in academic learning activities that focus on technical and applied computer science skills with little attention to the development of their holistic well-being.</p>
+      </div>
+      <div class="lcd-col">
+        <div class="lcd-col-label">Extraordinary learning</div>
+        <div class="lcd-col-title">Whole-Child Focus</div>
+        <ul>
+          <li>Development of computer science and AI knowledge and skills through kinesthetic activities, such as modeling or building hardware.</li>
+          <li>Development of emotional and social skills through digital literacy and citizenship instruction, self-reflection, and activities that promote self-regulation with technology use.</li>
+          <li>Safety, comfort, and privacy in online and in-person environments, both in and out of class.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="leap-carousel-detail" id="cl2">
+    <span class="lcd-tag">Connection & community</span>
+    <div class="lcd-cols">
+      <div class="lcd-col">
+        <div class="lcd-col-label">Industrial-era learning</div>
+        <div class="lcd-col-title">Isolation & Conformity</div>
+        <p style="font-size:13px;color:#666;line-height:1.65;">Learners develop computer science and computing skills primarily through individual, independent practice, and are often encouraged to compete and outperform one another.</p>
+      </div>
+      <div class="lcd-col">
+        <div class="lcd-col-label">Extraordinary learning</div>
+        <div class="lcd-col-title">Connection & Community</div>
+        <ul>
+          <li>Many opportunities to communicate and collaborate with peers through academic and community-building activities like coding projects, design challenges, or community-based tech solutions that promote teamwork, shared goals, and appreciation of diverse problem-solving approaches.</li>
+          <li>Acceptance, respect, and celebration for who they are, their perspectives, and their contributions in computer science and AI learning, especially when working with others of different ability levels.</li>
+          <li>Opportunities to learn when and how humans, AI, or computer programs can best assist or complete tasks.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="leap-carousel-detail" id="cl3">
+    <span class="lcd-tag">High expectations & rigor</span>
+    <div class="lcd-cols">
+      <div class="lcd-col">
+        <div class="lcd-col-label">Industrial-era learning</div>
+        <div class="lcd-col-title">Low Expectations with Surface-Level Learning</div>
+        <p style="font-size:13px;color:#666;line-height:1.65;">Access to computer science is often limited to a select few, and learning tends to focus narrowly on rote hardware, software, or coding tasks, emphasizing memorization over deep understanding.</p>
+      </div>
+      <div class="lcd-col">
+        <div class="lcd-col-label">Extraordinary learning</div>
+        <div class="lcd-col-title">High Expectations with Rigorous Learning</div>
+        <ul>
+          <li>The same access to computer science and AI learning, regardless of their background or prior exposure.</li>
+          <li>Content and activities that are aligned with or exceed grade-level expectations, offering the appropriate level of support and challenge to grow their skills.</li>
+          <li>Computer science and AI tasks that demand rigorous thinking — analyzing data and recognizing patterns, synthesizing, and applying knowledge in real-world contexts while skillfully communicating with AI and maintaining critical judgment to evaluate outputs against their own voice and values.</li>
+          <li>Activities that build factual, conceptual, and procedural knowledge of computer science and AI, while also fostering awareness of multiple perspectives in the design and impact of technology.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="leap-carousel-detail" id="cl4">
+    <span class="lcd-tag">Relevance</span>
+    <div class="lcd-cols">
+      <div class="lcd-col">
+        <div class="lcd-col-label">Industrial-era learning</div>
+        <div class="lcd-col-title">Irrelevance</div>
+        <p style="font-size:13px;color:#666;line-height:1.65;">Computer science knowledge and skills are learned through hypothetical, standardized, and often uninteresting activities and scenarios to prepare young people for meaningful and authentic work later in life.</p>
+      </div>
+      <div class="lcd-col">
+        <div class="lcd-col-label">Extraordinary learning</div>
+        <div class="lcd-col-title">Relevance</div>
+        <ul>
+          <li>Opportunities to amplify students' strengths using computer science and AI while also getting targeted help and freedom to focus on creative and personally meaningful work.</li>
+          <li>Computer science and AI materials and assignments that reflect their backgrounds and cultures, as well as real-life data sets that connect to students' lives and communities.</li>
+          <li>Tasks that intentionally build on their prior knowledge.</li>
+          <li>Opportunities to use computer science and AI to bring ideas to life and experience how human creativity and technology work together, enable current careers, and shape society.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="leap-carousel-detail" id="cl5">
+    <span class="lcd-tag">Customization</span>
+    <div class="lcd-cols">
+      <div class="lcd-col">
+        <div class="lcd-col-label">Industrial-era learning</div>
+        <div class="lcd-col-title">One-Size-Fits-All Approach</div>
+        <p style="font-size:13px;color:#666;line-height:1.65;">All learners who can access computer science courses receive the same standardized instruction, regardless of specific needs.</p>
+      </div>
+      <div class="lcd-col">
+        <div class="lcd-col-label">Extraordinary learning</div>
+        <div class="lcd-col-title">Customization</div>
+        <ul>
+          <li>Learning structures that enable flexibility in how, when, where, and from whom they engage in computer science and AI, based on what supports them best.</li>
+          <li>Content that is tailored to their individual needs, interests, and learning goals, enabled by AI programs or computer-based software where possible.</li>
+          <li>Scaffolds and responsive supports to navigate complex computer science and AI learning successfully, such as AI that gets them unstuck faster so they can keep moving forward in their learning.</li>
+          <li>Multiple, flexible opportunities to demonstrate mastery of computer science and AI learning.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="leap-carousel-detail" id="cl6">
+    <span class="lcd-tag">Agency</span>
+    <div class="lcd-cols">
+      <div class="lcd-col">
+        <div class="lcd-col-label">Industrial-era learning</div>
+        <div class="lcd-col-title">Passive Compliance</div>
+        <p style="font-size:13px;color:#666;line-height:1.65;">Learners passively absorb computer science content from teachers or digital platforms, with minimal opportunities to explore ethical implications, make personal connections, engage with diverse perspectives, or solve pressing real-world problems.</p>
+      </div>
+      <div class="lcd-col">
+        <div class="lcd-col-label">Extraordinary learning</div>
+        <div class="lcd-col-title">Agency</div>
+        <ul>
+          <li>Opportunities to tackle ambitious challenges by making choices about when and how to use, modify, or build AI and computer programs that help them access information, overcome obstacles, and iterate faster.</li>
+          <li>Students routinely share and document their outputs with others to showcase their learning and contribute to classroom or community dialogue around safe and innovative uses of technology.</li>
+          <li>Opportunities to take individual or collective action, such as designing technologies or solutions using computer programs or AI, to positively impact their communities and the world.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <p class="intro-body" style="margin-top:1.5rem;margin-bottom:2rem;">These leaps shape the quality of every learning experience. That experience takes three forms — select any to explore what it looks like in practice and how it progresses across grade levels.</p>
+
+  <div class="exp-tabs">
+    <div class="exp-tab active" onclick="showExp('core')">Core Instruction</div>
+    <div class="exp-tab" onclick="showExp('enrichment')">Enrichment</div>
+    <div class="exp-tab" onclick="showExp('intervention')">Intervention</div>
+  </div>
+
+  <!-- CORE -->
+  <div class="exp-panel active" id="exp-core">
+    <div class="exp-why">
+      <div class="ep-section-label">What it is</div>
+      <div class="exp-why-body">Core instruction establishes the foundation for learning in Computational Literacy and AI. It is the primary, grade-level learning experience that all students participate in and is designed to meet the needs of the vast majority of learners.</div>
+    </div>
+    <div class="exp-why">
+      <div class="ep-section-label">Why it matters</div>
+      <div class="exp-why-body">When core instruction is strong and delivered at grade level, more students gain access to rigorous computing learning without being tracked out of opportunity. Because computing learning is cumulative, core instruction is essential for establishing the foundational knowledge students need to succeed over time. Seemingly small gaps — misunderstandings about variables, conditionals, functions, or data structures — can quickly block future learning. Core instruction also builds the shared language and practices that interventions and enrichment rely on, such as debugging routines, code readability expectations, and responsible AI decision-making.</div>
+    </div>
+    <div class="ep-section">
+      <div class="ep-section-label">Progression across grade bands</div>
+      <div class="grade-grid">
+        <div class="grade-card"><div class="grade-label">Elementary (K–5)</div><div class="grade-body">Foundational computational thinking, block-based programming, unplugged activities, and early AI concepts — classification, patterns, fairness. Strong emphasis on orientation and modeling. Offered as a core class or integrated into STEM.</div></div>
+        <div class="grade-card"><div class="grade-label">Middle School (6–8)</div><div class="grade-body">Increased focus on programming constructs, data representation, and structured practice. AI learning includes simple model-building and evaluation with reflection on limitations. Offered as a core class or integrated into STEM.</div></div>
+        <div class="grade-card"><div class="grade-label">High School (9–12)</div><div class="grade-body">More complex systems, data pipelines, and responsible AI use. Core instruction supports sustained projects while preserving explicit feedback and reflection. Offered as a core class, integrated into STEM, or through defined pathways.</div></div>
+      </div>
+    </div>
+    <div class="ep-section">
+      <div class="ep-section-label">The four-phase learning cycle in core instruction</div>
+      <div class="phase-block">
+        <div class="phase-header">① Orientation to Learning</div>
+        <ul class="phase-list">
+          <li>Clarifies learning goals, success criteria, and relevance — why a programming concept or AI system matters in the real world.</li>
+          <li>Establishes a belief that all students can learn Computational Literacy and AI, countering stereotypes about who belongs in computing.</li>
+          <li>Connects new learning to prior knowledge and future applications.</li>
+          <li>All students are expected to master the same standards, though the exact sequence and timeline may differ from student to student.</li>
+        </ul>
+      </div>
+      <div class="phase-block">
+        <div class="phase-header">② Exposure to New Knowledge & Skills</div>
+        <ul class="phase-list">
+          <li>Introduces new concepts and skills through explicit modeling, worked examples, and developmentally appropriate inquiry.</li>
+          <li>Uses various approaches — visuals, code walkthroughs, discussion, simulations — to reduce cognitive load.</li>
+          <li>Balances direct instruction with guided exploration as students build initial mental models.</li>
+        </ul>
+      </div>
+      <div class="phase-block">
+        <div class="phase-header">③ Practice & Demonstration</div>
+        <ul class="phase-list">
+          <li>Provides frequent, scaffolded opportunities to apply learning — debugging routines, short builds, data explorations.</li>
+          <li>Includes both deliberate practice for fluency and authentic tasks for application.</li>
+          <li>Encourages collaboration (e.g., pair programming) when it supports focus and learning goals.</li>
+          <li>Students' outputs or how they show mastery may look different from one another.</li>
+        </ul>
+      </div>
+      <div class="phase-block">
+        <div class="phase-header">④ Feedback & Reflection</div>
+        <ul class="phase-list">
+          <li>Provides timely, specific feedback aligned with clear criteria — code quality, reasoning, process, and responsible use.</li>
+          <li>Includes opportunities to revise work and reflect on strategies used.</li>
+          <li>Builds student self-efficacy by making progress visible.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hqi-link">The distinction between core, intervention, and enrichment is not <em>whether</em> students engage in these types of learning — but rather the level of support, intensity, time, and complexity each requires. All three parts share the same four-phase learning cycle: Orientation to Learning → Exposure to New Knowledge &amp; Skills → Practice &amp; Demonstration → Feedback &amp; Reflection. <a href="https://docs.google.com/document/d/1nbxZLbcNZ5OY3kjHssQaF1vDIR5P3arn3M4Xbz0_BFg/edit?tab=t.jl2zhddx1a2z" target="_blank">See the full high-quality instructional cycle reference →</a></div>
+  </div>
+
+  <!-- ENRICHMENT -->
+  <div class="exp-panel" id="exp-enrichment">
+    <div class="exp-why">
+      <div class="ep-section-label">What it is</div>
+      <div class="exp-why-body">Enrichment raises the ceiling — extending learning beyond the core experience by increasing depth, complexity, creativity, and authenticity. It provides opportunities for students to explore Computational Literacy in more open-ended ways while building identity, motivation, and a sense of agency as capable problem-solvers and creators.</div>
+    </div>
+    <div class="exp-why">
+      <div class="ep-section-label">Why it matters</div>
+      <div class="exp-why-body">Enrichment helps students deepen understanding and transfer core skills into new contexts, strengthening long-term learning and flexible problem-solving. In Computational Literacy and AI, enrichment is a powerful driver of identity development: students are more likely to persist in computing pathways when they experience autonomy, meaningful purpose, and opportunities to create work that matters to them or their communities. Enrichment creates space for curiosity, innovation, and challenge — helping students move beyond "getting the code to work" toward designing, refining, and communicating solutions. It also supports responsible AI literacy by giving students structured opportunities to explore how AI systems behave, where they fall short, and what ethical considerations come with using them.</div>
+    </div>
+    <div class="ep-section">
+      <div class="ep-section-label">Progression across grade bands</div>
+      <div class="grade-grid">
+        <div class="grade-card"><div class="grade-label">Elementary (K–5)</div><div class="grade-body">Enrichment often looks like creative computing — interactive stories, games, animations, or simple AI-inspired sorting and classifying activities tied to student interests and play.</div></div>
+        <div class="grade-card"><div class="grade-label">Middle School (6–8)</div><div class="grade-body">Students engage in mini-projects with data and AI tools — experimenting with classification, critiquing limitations, refining designs — often in collaborative teams.</div></div>
+        <div class="grade-card"><div class="grade-label">High School (9–12)</div><div class="grade-body">Enrichment can expand into capstones, advanced electives, community-based projects, research experiences, internships, competitions, or deeper AI systems work with strong ethical and safety guardrails.</div></div>
+      </div>
+    </div>
+    <div class="ep-section">
+      <div class="ep-section-label">The four-phase learning cycle in enrichment</div>
+      <div class="phase-block">
+        <div class="phase-header">① Orientation to Learning</div>
+        <ul class="phase-list">
+          <li>Centers student choice, purpose, and relevance — "What problem do you want to solve with computing or AI?"</li>
+          <li>Connects learning to real-world meaning, community issues, or student interests.</li>
+          <li>Builds motivation and ownership by allowing students to define success and set goals.</li>
+          <li>Students know how their enrichment learning connects to the standards in core instruction.</li>
+        </ul>
+      </div>
+      <div class="phase-block">
+        <div class="phase-header">② Exposure to New Knowledge & Skills</div>
+        <ul class="phase-list">
+          <li>Introduces advanced or extended content connected to core learning — APIs, new libraries, model evaluation ideas, new data sources.</li>
+          <li>Provides optional scaffolds so students can stretch without getting stuck.</li>
+          <li>Encourages exploration through structured inquiry rather than step-by-step replication.</li>
+        </ul>
+      </div>
+      <div class="phase-block">
+        <div class="phase-header">③ Practice & Demonstration</div>
+        <ul class="phase-list">
+          <li>Emphasizes authentic application through longer builds — projects, prototypes, investigations, or community-based challenges.</li>
+          <li>Expands what "demonstration" can look like: code, design artifacts, testing plans, user research, ethical analyses.</li>
+          <li>Encourages iteration, experimentation, and problem-solving under real constraints.</li>
+          <li>How students demonstrate mastery may look different from one another.</li>
+        </ul>
+      </div>
+      <div class="phase-block">
+        <div class="phase-header">④ Feedback & Reflection</div>
+        <ul class="phase-list">
+          <li>Incorporates feedback from multiple perspectives — peers, teachers, mentors, end users, community members.</li>
+          <li>Emphasizes reflection on both product and process: what changed, why decisions were made, tradeoffs, and impact.</li>
+          <li>Builds metacognition, communication skills, and a deeper computing identity — "I am someone who can build, test, and improve systems."</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hqi-link">The distinction between core, intervention, and enrichment is not <em>whether</em> students engage in these types of learning — but rather the level of support, intensity, time, and complexity each requires. All three parts share the same four-phase learning cycle: Orientation to Learning → Exposure to New Knowledge &amp; Skills → Practice &amp; Demonstration → Feedback &amp; Reflection. <a href="https://docs.google.com/document/d/1nbxZLbcNZ5OY3kjHssQaF1vDIR5P3arn3M4Xbz0_BFg/edit?tab=t.jl2zhddx1a2z" target="_blank">See the full high-quality instructional cycle reference →</a></div>
+  </div>
+
+  <!-- INTERVENTION -->
+  <div class="exp-panel" id="exp-intervention">
+    <div class="exp-why">
+      <div class="ep-section-label">What it is</div>
+      <div class="exp-why-body">Intervention acts as a safety net — providing targeted, additional support for students who are not yet making sufficient progress in core Computational Literacy learning. It is designed to address specific learning needs without replacing access to grade-level instruction.</div>
+    </div>
+    <div class="exp-why">
+      <div class="ep-section-label">Why it matters</div>
+      <div class="exp-why-body">Computing learning is cumulative, and even small misunderstandings — confusion about variables, Boolean logic, conditionals, loops, functions, or data handling — can quickly become barriers to future learning. Within a Multi-Tiered System of Supports (MTSS) framework, intervention serves as a responsive layer of support that helps students strengthen foundational skills while staying connected to Tier 1 grade-level goals. High-quality intervention also protects student confidence and persistence: programming often includes frequent "failure states" (bugs, errors, unexpected outputs), and targeted support paired with rapid feedback can rebuild self-efficacy and reduce disengagement.</div>
+    </div>
+    <div class="ep-section">
+      <div class="ep-section-label">Progression across grade bands</div>
+      <div class="grade-grid">
+        <div class="grade-card"><div class="grade-label">Elementary (K–5)</div><div class="grade-body">Supports rely on concrete and multimodal approaches — unplugged routines, block sequencing cards, guided tool use — to strengthen early logic and sequencing skills.</div></div>
+        <div class="grade-card"><div class="grade-label">Middle School (6–8)</div><div class="grade-body">Common intervention focuses include debugging routines, conditional reasoning, variable tracking, and understanding code structure through tracing and explanation.</div></div>
+        <div class="grade-card"><div class="grade-label">High School (9–12)</div><div class="grade-body">Targeted clinics may focus on functions, scope, data structures, testing and debugging workflows, and for AI: dataset quality, evaluation basics, and interpretation of model behavior.</div></div>
+      </div>
+    </div>
+    <div class="ep-section">
+      <div class="ep-section-label">The four-phase learning cycle in intervention</div>
+      <div class="phase-block">
+        <div class="phase-header">① Orientation to Learning</div>
+        <ul class="phase-list">
+          <li>Clarifies the specific skill focus and why it matters — "Today we're working on loops because they help us automate patterns in our programs."</li>
+          <li>Reinforces that growth is expected and achievable, supporting student confidence and persistence.</li>
+          <li>Makes success criteria concrete and visible — "I can trace this code and explain what happens step by step."</li>
+          <li>Students target specific standards based on their unique needs.</li>
+        </ul>
+      </div>
+      <div class="phase-block">
+        <div class="phase-header">② Exposure to New Knowledge & Skills</div>
+        <ul class="phase-list">
+          <li>Re-introduces key ideas using different representations or more explicit teaching — diagrams, tracing tables, worked examples.</li>
+          <li>Slows pacing and reduces cognitive load by chunking content into smaller steps.</li>
+          <li>Provides guided modeling of thinking processes students may not yet do independently — debugging moves, predicting output, reading error messages.</li>
+        </ul>
+      </div>
+      <div class="phase-block">
+        <div class="phase-header">③ Practice & Demonstration</div>
+        <ul class="phase-list">
+          <li>Focuses practice on a small set of high-leverage tasks — tracing conditionals, fixing one bug type, writing one function pattern.</li>
+          <li>Provides repetition and structured support to build fluency and reduce overwhelm.</li>
+          <li>Uses short, frequent practice cycles that allow students to make progress quickly.</li>
+          <li>How students demonstrate mastery may look different from one another.</li>
+        </ul>
+      </div>
+      <div class="phase-block">
+        <div class="phase-header">④ Feedback & Reflection</div>
+        <ul class="phase-list">
+          <li>Provides rapid, actionable feedback with immediate opportunities to revise and succeed.</li>
+          <li>Helps students name what strategy worked — "I used print statements to locate the bug."</li>
+          <li>Makes progress visible so students can see growth and regain momentum.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="ep-section">
+      <div class="ep-section-label">Key design principles for intervention</div>
+      <div class="what-box"><div class="wb-title">Intervention is additive, not replacement.</div><div class="wb-body">Intervention should protect access to grade-level Computational Literacy instruction rather than replace it. Students in intervention still participate in core instruction.</div></div>
+      <div class="what-box"><div class="wb-title">Curriculum alignment is essential.</div><div class="wb-body">Intervention tasks should mirror the language, representations, and expectations of core instruction so students aren't learning in a disconnected system.</div></div>
+      <div class="what-box"><div class="wb-title">Staffing matters.</div><div class="wb-body">Teachers play a key role in diagnosing needs through student work. Interventionists, specialists, or trained support staff can deliver high-impact small-group sessions using aligned protocols and materials.</div></div>
+    </div>
+    <div class="hqi-link">The distinction between core, intervention, and enrichment is not <em>whether</em> students engage in these types of learning — but rather the level of support, intensity, time, and complexity each requires. All three parts share the same four-phase learning cycle: Orientation to Learning → Exposure to New Knowledge &amp; Skills → Practice &amp; Demonstration → Feedback &amp; Reflection. <a href="https://docs.google.com/document/d/1nbxZLbcNZ5OY3kjHssQaF1vDIR5P3arn3M4Xbz0_BFg/edit?tab=t.jl2zhddx1a2z" target="_blank">See the full high-quality instructional cycle reference →</a></div>
+  </div>
+
+  <div class="page-footer"><strong>Transcend partners with communities to create and spread extraordinary learning for all.</strong></div>
+</div>
+
+<!-- 
+     TAB 4 — SCHOOL ELEMENTS
+ -->
+<div class="tab-panel" id="tab-elements">
+  <div class="print-bar">
+    <button class="btn-print" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>Print this tab</button>
+    <button class="btn-print btn-pdf" onclick="alert('PDF export coming soon. For now, use Print → Save as PDF in your browser.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Download PDF</button>
+    <button class="btn-print" onclick="alert('Slide presentation link coming soon.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>View as Slides</button>
+  </div>
+  <div class="eyebrow">Computational Literacy · Design Guidance</div>
+  <h1>School elements design guide</h1>
+  <div class="rule"></div>
+  <p class="intro">Nine elements of school design shape whether students experience extraordinary CS and AI learning. Select any element to explore goals, what strong design looks like, and common challenges with design responses.</p>
+
+  <div class="elem-nav-grid">
+    <button class="en-btn active" onclick="showElement('curriculum')"><div class="en-num">01</div><div class="en-name">Curriculum, Instruction & Assessment</div></button>
+    <button class="en-btn" onclick="showElement('culture')"><div class="en-num">02</div><div class="en-name">School & Classroom Culture, Routines & Norms</div></button>
+    <button class="en-btn" onclick="showElement('time')"><div class="en-num">03</div><div class="en-name">Schedules & Use of Time</div></button>
+    <button class="en-btn" onclick="showElement('adults')"><div class="en-num">04</div><div class="en-name">Adult Roles, Hiring & Learning</div></button>
+    <button class="en-btn" onclick="showElement('tech')"><div class="en-num">05</div><div class="en-name">Technology & Tech Infrastructure</div></button>
+    <button class="en-btn" onclick="showElement('space')"><div class="en-num">06</div><div class="en-name">Space & Facilities</div></button>
+    <button class="en-btn" onclick="showElement('family')"><div class="en-num">07</div><div class="en-name">Family & Community Partnerships</div></button>
+    <button class="en-btn" onclick="showElement('budget')"><div class="en-num">08</div><div class="en-name">Budget & Operations</div></button>
+    <button class="en-btn" onclick="showElement('improvement')"><div class="en-num">09</div><div class="en-name">Continuous Learning & Improvement</div></button>
+  </div>
+
+  <div class="element-panel active" id="ep-curriculum">
+    <div class="ep-header"><div><div class="ep-title">Curriculum, Instruction & Assessment</div><div class="ep-tagline">What students learn, how they learn it, and how learning is measured.</div></div></div>
+    <div class="ep-section"><div class="ep-section-label">Goals for this design</div>
+      <ul class="goals-list">
+        <li>A coordinated, standards-aligned instructional system covering the full scope of Computational Literacy learning outcomes, assembled from multiple curricula and platforms where necessary, with AI integrated throughout and with explicit attention to vertical alignment across grade bands.</li>
+        <li>A set of research-informed instructional principles that guide how Computational Literacy content is taught, acknowledging that AI literacy instruction in particular remains an emerging area where validated pedagogical sequences do not yet exist.</li>
+        <li>Supplemental materials tightly aligned to the core instructional system and adapted for Computational Literacy's distinctive pedagogical needs, selected and sequenced to reinforce the instructional approaches used in core instruction.</li>
+        <li>A differentiated support system providing scaffolded intervention for students who struggle with Computational Literacy concepts, including both programming concepts and AI-specific reasoning skills.</li>
+        <li>A purposeful and multi-layered assessment system that provides actionable data for instructional decision-making, acknowledging that validated Computational Literacy-specific instruments are largely absent.</li>
+      </ul>
+    </div>
+    <div class="ep-section"><div class="ep-section-label">What it looks like in a strong Computational Literacy design</div>
+      <div class="what-box"><div class="wb-title">Curriculum addresses all Computational Literacy learning outcomes with clear progression.</div><div class="wb-body">Students build knowledge and skills across grade levels through vetted curricula that develop all six domains — not isolated units, but a coherent K–12 sequence.</div></div>
+      <div class="what-box"><div class="wb-title">Instruction uses varied approaches and activities.</div><div class="wb-body">Students learn through explicit instruction, hands-on coding and unplugged activities, collaborative projects, inquiry-based problem-solving, industry experiences, peer discussions, and real-world applications that integrate AI tools and connect to their lives.</div></div>
+      <div class="what-box"><div class="wb-title">Assessment is ongoing and authentic.</div><div class="wb-body">Teachers track progress through outcome-aligned exit tickets, project evaluations, peer feedback, self-reflection, class discussions, and diagnostics. Assessments are curriculum-based rather than waiting for standardized tests.</div></div>
+      <div class="what-box"><div class="wb-title">AI literacy is woven throughout instruction.</div><div class="wb-body">Students learn how AI works, its applications and limitations, ethical considerations, and how to use AI tools responsibly — embedded throughout the learning sequence, not added on.</div></div>
+    </div>
+    <div class="ep-section"><div class="ep-section-label">Common challenges & design responses</div>
+      <div class="challenge-grid">
+        <div class="challenge-card"><div class="cc-label challenge">Challenge</div><div class="wb-body">Available curricula rarely cover all learning outcomes. Most require stitching multiple resources together, which risks gaps and incoherence.</div></div>
+        <div class="challenge-card"><div class="cc-label response">Design response</div><div class="wb-body">Map available curricula against the six outcome domains explicitly. Identify gaps and plan targeted supplementation or custom units for uncovered areas.</div></div>
+        <div class="challenge-card"><div class="cc-label challenge">Challenge</div><div class="wb-body">Traditional CS instruction tends to be isolating rather than collaborative, with students working independently on screens.</div></div>
+        <div class="challenge-card"><div class="cc-label response">Design response</div><div class="wb-body">Build in pair programming, group projects, and structured discussions as core instructional strategies. Collaboration is a learning outcome, not a reward.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="element-panel" id="ep-culture">
+    <div class="ep-header"><div><div class="ep-title">School & Classroom Culture, Routines & Norms</div><div class="ep-tagline">The shared beliefs, expectations, and patterns of interaction that shape how students experience learning every day.</div></div></div>
+    <div class="ep-section"><div class="ep-section-label">Goals for this design</div>
+      <ul class="goals-list">
+        <li>Computational Literacy classroom behavioral norms explicitly support participation by all students — making it safe to ask questions, attempt problems publicly, share incomplete thinking, and be wrong.</li>
+        <li>Computational Literacy norms are designed around the specific social demands of computing work, including pair programming, collaborative debugging, code review, and peer critique.</li>
+        <li>Behavioral expectations actively challenge the 'geek myth' and other stereotypical cues about who belongs in computing — signaling through environment, norms, and expectations that computing is for everyone.</li>
+        <li>Disciplinary systems protect Computational Literacy learning time rather than removing students from it, with relational and restorative approaches that keep all students in class.</li>
+        <li>Schoolwide behavioral norms are implemented in ways that are explicitly compatible with the kind of engaged, collaborative Computational Literacy instruction that research identifies as essential for learning.</li>
+      </ul>
+    </div>
+    <div class="ep-section"><div class="ep-section-label">What it looks like in a strong Computational Literacy design</div>
+      <div class="what-box"><div class="wb-title">Every student belongs in computing.</div><div class="wb-body">Inclusive language, diverse role models, and celebrating varied approaches signal to every student — especially those historically excluded from CS — that they are capable computer scientists and AI users.</div></div>
+      <div class="what-box"><div class="wb-title">Computational Literacy connects to real-world topics students care about.</div><div class="wb-body">Computational thinking is grounded in issues students find meaningful — climate change, social justice, community needs, and AI ethics. CS topics that connect the real world to the school community are visualized throughout the school.</div></div>
+      <div class="what-box"><div class="wb-title">Routines build collaboration and digital wellness.</div><div class="wb-body">Classroom norms emphasize peer support and productive struggle. Schools promote healthy technology habits, balanced screen time, and mindful use of digital tools including AI.</div></div>
+      <div class="what-box"><div class="wb-title">AI and emerging technologies are ongoing conversations.</div><div class="wb-body">Students, families, and staff engage regularly in discussions about AI's impact, ethical computing, and responsible technology use — woven into school culture, not limited to one-time lessons.</div></div>
+    </div>
+    <div class="ep-section"><div class="ep-section-label">Common challenges & design responses</div>
+      <div class="challenge-grid">
+        <div class="challenge-card"><div class="cc-label challenge">Challenge</div><div class="wb-body">CS culture often defaults to a narrow "programmer" identity that excludes students who don't self-identify with tech — particularly girls, students of color, and students from under-resourced communities.</div></div>
+        <div class="challenge-card"><div class="cc-label response">Design response</div><div class="wb-body">Actively surface diverse computing role models, celebrate multiple ways of solving problems, and connect CS to domains students already care about. Representation in materials and classroom visuals matters.</div></div>
+        <div class="challenge-card"><div class="cc-label challenge">Challenge</div><div class="wb-body">Productive failure — essential in CS — can undermine student confidence if classrooms aren't built to normalize struggle and iteration.</div></div>
+        <div class="challenge-card"><div class="cc-label response">Design response</div><div class="wb-body">Build explicit norms around debugging, revision, and learning from errors. Frame "my code doesn't work" as a normal, expected part of the process — not a sign of incapacity.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="element-panel" id="ep-time">
+    <div class="ep-header"><div><div class="ep-title">Schedules & Use of Time</div><div class="ep-tagline">How instructional time is allocated, structured, and protected for CS and AI learning.</div></div></div>
+    <div class="ep-section"><div class="ep-section-label">Goals for this design</div>
+      <ul class="goals-list">
+        <li>Computational Literacy instructional time is protected and recurring — not treated as optional, discretionary, or the first thing cut when other priorities arise.</li>
+        <li>Scheduling decisions ensure universal access: every student receives Computational Literacy instruction regardless of which teacher, schedule track, or pull-out services they are assigned to.</li>
+        <li>Instructional time is designed for depth, not coverage — each session includes sufficient uninterrupted time for students to engage in the full arc of computational work.</li>
+        <li>Students have scheduled time for authentic application and project-based work beyond drill and tutorial, so they develop transferable computational thinking and a computing identity.</li>
+        <li>Intervention or additional support time does not replace access to core Computational Literacy instruction — students receiving supports in other subjects are not systematically excluded.</li>
+        <li>The yearly and unit calendar includes deliberate cycles for formative assessment and responsive regrouping, so instructional time is used adaptively rather than marching through content regardless of evidence of learning.</li>
+      </ul>
+    </div>
+    <div class="ep-section"><div class="ep-section-label">What it looks like in a strong Computational Literacy design</div>
+      <div class="what-box"><div class="wb-title">Adequate time is allocated for Computational Literacy instruction.</div><div class="wb-body">Students engage in 2–5 hours per week of Computational Literacy instruction. The master schedule protects this time with the same priority as core subjects.</div></div>
+      <div class="what-box"><div class="wb-title">Computational Literacy is integrated across subjects and schedules.</div><div class="wb-body">Computational thinking and AI literacy are woven into math, science, ELA, and social studies — not siloed to a single period. Cross-curricular integration reinforces learning and increases total exposure.</div></div>
+      <div class="what-box"><div class="wb-title">Flexible instructional structures allow for differentiation.</div><div class="wb-body">Station rotations, weekly digital citizenship lessons, quarterly Computational Literacy projects, and CS explorations give teachers tools to reach different learners across core instruction, enrichment, and intervention.</div></div>
+      <div class="what-box"><div class="wb-title">Professional learning time is built into the schedule.</div><div class="wb-body">Staff schedules include dedicated time for Computational Literacy training, collaborative planning, and ongoing learning about emerging technologies including AI.</div></div>
+    </div>
+    <div class="ep-section"><div class="ep-section-label">Common challenges & design responses</div>
+      <div class="challenge-grid">
+        <div class="challenge-card"><div class="cc-label challenge">Challenge</div><div class="wb-body">CS lacks core subject status in most states, making it easy to cut when schedules are tight or competing priorities emerge.</div></div>
+        <div class="challenge-card"><div class="cc-label response">Design response</div><div class="wb-body">Anchor CS time to existing schedule structures. Make it non-negotiable at the master schedule level, visible in the school's public communication about what it offers.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="element-panel" id="ep-adults">
+    <div class="ep-header"><div><div class="ep-title">Adult Roles, Hiring & Learning</div><div class="ep-tagline">What adults do, what they need to know and believe, how they are hired, and how they are supported to grow.</div></div></div>
+    <div class="ep-section"><div class="ep-section-label">Goals for this element</div>
+      <ul class="goals-list">
+        <li>Educators believe deeply in every student's potential to excel in computing and feel shared responsibility to broaden participation — regardless of background, prior achievement, or whether students see themselves as "tech people."</li>
+        <li>All educators responsible for Computational Literacy instruction possess strong content knowledge and pedagogical expertise, including the ability to anticipate students' thinking and address misconceptions.</li>
+        <li>Collaboration among educators is routine and purposeful — grounded in shared materials and student work, enabling consistent practice across classrooms.</li>
+        <li>Professional learning is ongoing, curriculum-embedded, and directly connected to upcoming instruction — sustained long enough to meaningfully build CS content knowledge and self-efficacy.</li>
+        <li>Educators and leaders understand that Computational Literacy education is a rapidly evolving field, and professional learning systems are designed to keep pace with changes in content, pedagogy, tools, and AI.</li>
+      </ul>
+    </div>
+    <div class="ep-section"><div class="ep-section-label">What it looks like in a strong Computational Literacy design</div>
+      <div class="what-box"><div class="wb-title">Computational Literacy leadership roles are clearly established.</div><div class="wb-body">A specialized Computational Literacy teacher with CS expertise, an IT specialist for tech management, and a STEM+Computational Literacy administrator oversee program development. Principals, APs, and instructional coaches actively support Computational Literacy implementation.</div></div>
+      <div class="what-box"><div class="wb-title">Professional development is continuous, curriculum-aligned, and AI-inclusive.</div><div class="wb-body">Teachers receive training that builds capacity to understand AI tools, teach AI concepts appropriately, and integrate AI responsibly into Computational Literacy instruction. PD includes coaching cycles, lesson internalization protocols, and PLCs.</div></div>
+    </div>
+    <div class="ep-section"><div class="ep-section-label">Common challenges & design responses</div>
+      <div class="challenge-grid">
+        <div class="challenge-card"><div class="cc-label challenge">Challenge</div><div class="wb-body">Only 48% of teachers currently feel equipped to teach AI, and 88% say they need more professional learning resources. AI advances faster than most PD systems can keep up.</div></div>
+        <div class="challenge-card"><div class="cc-label response">Design response</div><div class="wb-body">Build a sustained, multi-year PD system rather than one-time workshops. Partner with curriculum providers for embedded support. Connect educators to professional networks like CSTA.</div></div>
+        <div class="challenge-card"><div class="cc-label challenge">Challenge</div><div class="wb-body">CS educators are often isolated — the only person in their building teaching the subject — which limits collaboration, coaching, and shared improvement.</div></div>
+        <div class="challenge-card"><div class="cc-label response">Design response</div><div class="wb-body">Create cross-school or cross-district PLCs for CS educators. Use virtual collaboration tools to connect isolated teammates. Designate a CS instructional lead even in small settings.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="element-panel" id="ep-tech">
+    <div class="ep-header"><div><div class="ep-title">Technology & Tech Infrastructure</div><div class="ep-tagline">Devices, connectivity, software, and the systems that keep them working equitably and reliably.</div></div></div>
+    <div class="ep-section"><div class="ep-section-label">Goals for this design</div>
+      <ul class="goals-list">
+        <li>Every student has equitable access to the devices, connectivity, software, and physical materials required to participate fully in Computational Literacy learning, regardless of school resources, home environment, or grade level.</li>
+        <li>The physical classroom environment is intentionally configured to support the mode of computing work students are doing, with furniture, display surfaces, and spatial arrangements that flex between collaborative design work, individual coding, hardware building, and whole-class discussion.</li>
+        <li>Computing tools — devices, software environments, coding platforms, physical computing kits, and AI tools — are selected and deployed based on their instructional fit with specific learning goals, with schools maintaining a coherent tool ecosystem across grade levels.</li>
+        <li>Schools make deliberate, transparent, and revisable decisions about student access to AI tools, grounded in their community's values, students' developmental levels, and an honest assessment of both the learning opportunities and the risks these tools present.</li>
+      </ul>
+    </div>
+    <div class="ep-section"><div class="ep-section-label">What it looks like in a strong Computational Literacy design</div>
+      <div class="what-box"><div class="wb-title">Equitable access to devices and connectivity is guaranteed.</div><div class="wb-body">A 1:1 device-to-student ratio with reliable WiFi at school and home. Device refresh schedules prevent equity gaps from widening over time as hardware ages.</div></div>
+      <div class="what-box"><div class="wb-title">Technology procurement is aligned to curriculum.</div><div class="wb-body">All hardware and software purchases directly support curriculum requirements and are sustainable beyond individual teachers. AI platforms and software are evaluated for long-term viability — not just grant-period coverage.</div></div>
+      <div class="what-box"><div class="wb-title">Systems manage technology reliably.</div><div class="wb-body">An LMS organizes coursework, clear procedures govern device distribution and security, and digital citizenship policies are in place. Tech support with clear troubleshooting protocols serves students, families, and staff.</div></div>
+    </div>
+    <div class="ep-section"><div class="ep-section-label">Common challenges & design responses</div>
+      <div class="challenge-grid">
+        <div class="challenge-card"><div class="cc-label challenge">Challenge</div><div class="wb-body">AI educational tools proliferate faster than schools can evaluate them. Without quality control frameworks, schools risk adopting tools that are pedagogically weak, inequitable, or unsustainable.</div></div>
+        <div class="challenge-card"><div class="cc-label response">Design response</div><div class="wb-body">Use the Curriculum Evaluator Tool and AI Curriculum Airtable to assess tools against criteria including alignment to Computational Literacy outcomes, equity features, and evidence of effectiveness.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="element-panel" id="ep-space">
+    <div class="ep-header"><div><div class="ep-title">Space & Facilities</div><div class="ep-tagline">How physical learning environments are designed, arranged, and equipped to support the full range of Computational Literacy learning modes.</div></div></div>
+    <div class="ep-section"><div class="ep-section-label">Goals for this design</div>
+      <ul class="goals-list">
+        <li>Every student has equitable access to the devices, connectivity, software, and physical materials required to participate fully in Computational Literacy learning.</li>
+        <li>The physical classroom environment is intentionally configured to support the mode of computing work students are doing, with spaces that flex between collaborative design, individual coding, hardware building, and whole-class discussion.</li>
+        <li>Computing tools are selected and deployed based on their instructional fit with specific learning goals, with schools maintaining a coherent tool ecosystem so students build genuine fluency rather than constantly adapting to new interfaces.</li>
+        <li>Schools make deliberate, transparent, and revisable decisions about physical space configuration, grounded in the full range of learning modes Computational Literacy instruction requires.</li>
+      </ul>
+    </div>
+    <div class="ep-section"><div class="ep-section-label">What it looks like in a strong Computational Literacy design</div>
+      <div class="what-box"><div class="wb-title">Spaces support the full range of Computational Literacy learning modes.</div><div class="wb-body">Effective computing spaces accommodate pair programming, group projects, design sprints, debugging sessions, hardware building, and whole-class discussion. A traditional fixed-row computer lab serves none of these well.</div></div>
+      <div class="what-box"><div class="wb-title">Physical computing materials are treated as core infrastructure.</div><div class="wb-body">Robotics kits, microcontrollers, sensors, and maker tools are budgeted on the same cycle as textbooks, with assigned maintenance responsibility and documented checkout systems.</div></div>
+      <div class="what-box"><div class="wb-title">Flexible furniture enables multiple configurations.</div><div class="wb-body">Modular furniture reconfigurable in under two minutes, power access across the room, large shared displays visible from all positions, adequate material storage, and writable surfaces for collaborative design.</div></div>
+    </div>
+    <div class="ep-section"><div class="ep-section-label">Common challenges & design responses</div>
+      <div class="challenge-grid">
+        <div class="challenge-card"><div class="cc-label challenge">Challenge</div><div class="wb-body">Computing educators often inherit spaces not designed for their pedagogy. Making the case for reconfiguration requires explaining why a "computer lab" is insufficient.</div></div>
+        <div class="challenge-card"><div class="cc-label response">Design response</div><div class="wb-body">Audit existing spaces against the full range of Computational Literacy learning modes. Use the audit to generate specific renovation requests. Spatial disparities are a learning equity issue.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="element-panel" id="ep-family">
+    <div class="ep-header"><div><div class="ep-title">Family & Community Partnerships</div><div class="ep-tagline">How schools engage caregivers and communities as partners in students' computing and AI learning.</div></div></div>
+    <div class="ep-section"><div class="ep-section-label">Goals for this element</div>
+      <ul class="goals-list">
+        <li>Families are informed early, often, and specifically about what AI is being used in class, why, and what student data it touches — recognizing that as of 2025, 96% of families with elementary-aged children reported receiving no AI-related communication from their school.</li>
+        <li>Communication about CS and AI instruction is bidirectional and ongoing — allowing families to ask questions and share concerns as tools evolve.</li>
+        <li>Families are meaningfully engaged as partners in their children's computing and AI learning — with opportunities to understand what students are doing, why it matters, and how to support learning at home.</li>
+        <li>Engagement practices are designed to reach all families, including those facing language barriers, schedule constraints, limited digital access, or historical marginalization from school systems.</li>
+      </ul>
+    </div>
+    <div class="ep-section"><div class="ep-section-label">What it looks like in a strong Computational Literacy design</div>
+      <div class="what-box"><div class="wb-title">Families are partners, not recipients of information.</div><div class="wb-body">Computational Literacy nights, workshops on supporting computational thinking at home, and opportunities to participate in showcases position caregivers as active participants. Their expertise about their children and communities informs the design.</div></div>
+      <div class="what-box"><div class="wb-title">Real-world learning connects students to community and careers.</div><div class="wb-body">Guest speakers, workplace tours, student mentorships, and community-based projects connect students to Computational Literacy applications and career pathways — making learning relevant and broadening participation.</div></div>
+      <div class="what-box"><div class="wb-title">AI communication is proactive and transparent.</div><div class="wb-body">Schools provide regular updates when new tools are introduced, explain what data is collected and how it is protected, and offer ready-made communication templates so messaging quality doesn't depend on individual teacher initiative.</div></div>
+    </div>
+    <div class="ep-section"><div class="ep-section-label">Common challenges & design responses</div>
+      <div class="challenge-grid">
+        <div class="challenge-card"><div class="cc-label challenge">Challenge</div><div class="wb-body">Many caregivers have limited technical backgrounds and may experience AI anxiety — which can translate into skepticism about classroom practices if schools don't address it directly.</div></div>
+        <div class="challenge-card"><div class="cc-label response">Design response</div><div class="wb-body">Offer adult-only sessions where caregivers experience CS and AI activities themselves. Acknowledge uncertainty openly — families who feel included in the learning process trust schools more than those who feel information is being managed.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="element-panel" id="ep-budget">
+    <div class="ep-header"><div><div class="ep-title">Budget & Operations</div><div class="ep-tagline">How resources are allocated, sustained, and diversified to support a durable Computational Literacy program.</div></div></div>
+    <div class="ep-section"><div class="ep-section-label">Goals for this design</div>
+      <ul class="goals-list">
+        <li>Computational Literacy education is funded as a core subject, with budget allocations for curriculum, professional learning, coaching, hardware, and AI tools that reflect the instructional priorities of the school's design.</li>
+        <li>Implementation spending matches or exceeds adoption spending — the cost of acquiring curriculum materials and tools is only the beginning; sustainable improvement requires ongoing investment in professional learning, coaching, and hardware refresh cycles.</li>
+        <li>AI tool procurement is governed by a deliberate vetting framework that evaluates instructional alignment, evidence of impact, student data privacy, equity of access, and total cost of ownership.</li>
+        <li>Operational systems — scheduling, procurement timelines, staffing allocation, and infrastructure planning — are designed to enable the Computational Literacy instructional model rather than constrain it.</li>
+        <li>Resource allocation in CS and AI education actively counteracts historical inequities: schools serving students most systematically excluded from computer science receive the instructional resources, qualified staffing, and operational support needed to provide rigorous, accessible learning.</li>
+        <li>Temporary funding opportunities are used strategically to build infrastructure and initiate programs, with transition plans that identify how high-leverage investments will be sustained through recurring budget lines when one-time funds expire.</li>
+      </ul>
+    </div>
+    <div class="ep-section"><div class="ep-section-label">What it looks like in a strong Computational Literacy design</div>
+      <div class="what-box"><div class="wb-title">Computational Literacy essentials are funded sustainably.</div><div class="wb-body">Budgets cover technology, staff, professional development, curriculum, and infrastructure — annually, not just in year one. Initial and ongoing costs are planned explicitly rather than assumed to decrease.</div></div>
+      <div class="what-box"><div class="wb-title">AI tool funding extends beyond grant periods.</div><div class="wb-body">New AI platforms and software are evaluated for sustainability. Schools avoid building dependence on short-term funding that disappears in 2–3 years, displacing both tools and the teacher capacity built around them.</div></div>
+      <div class="what-box"><div class="wb-title">Staffing resources are allocated strategically.</div><div class="wb-body">Dedicated Computational Literacy educators, specialists across grade levels, planning time for integration, instructional coaches, and coordinators for secondary pathways are funded as core positions — not add-ons.</div></div>
+      <div class="what-box"><div class="wb-title">Funding sources are diverse.</div><div class="wb-body">Local partnerships, state and federal grants (including NSF and USDOE investments in AI education), and community fundraising supplement core allocations — reducing vulnerability to any single funding source.</div></div>
+    </div>
+  </div>
+
+  <div class="element-panel" id="ep-improvement">
+    <div class="ep-header"><div><div class="ep-title">Continuous Learning & Improvement</div><div class="ep-tagline">The systems and routines used to define success, measure progress, and reflect together to improve quality and impact.</div></div></div>
+    <div class="ep-section"><div class="ep-section-label">Goals for this design</div>
+      <ul class="goals-list">
+        <li>Improvement efforts in Computational Literacy education are sustained, focused, and cumulative — with schools selecting a small number of high-leverage instructional priorities and pursuing them over multiple years rather than cycling through disconnected initiatives.</li>
+        <li>Assessment practices in Computational Literacy classrooms serve instructional purposes — providing timely, actionable feedback to both students and teachers about conceptual understanding, computational thinking, and coding proficiency.</li>
+        <li>Collaborative data structures and protocols support Computational Literacy teachers in examining student work and thinking together, breaking the professional isolation that characterizes CS teaching in most schools.</li>
+        <li>Implementation monitoring in Computational Literacy education is framed as a learning and support practice — using content-specific look-fors and observation tools that help leaders identify where teachers need content knowledge development or coaching.</li>
+        <li>Equity is an explicit and ongoing object of continuous improvement — using participation and outcomes data to identify and address structural barriers, and embedding equity review into every data cycle.</li>
+        <li>CS and AI improvement efforts are connected to broader professional networks and research-practice partnerships that can supply curriculum-aligned assessments, implementation tools, and cross-school learning.</li>
+      </ul>
+    </div>
+    <div class="ep-section"><div class="ep-section-label">Goals for this element</div>
+      <ul class="goals-list">
+        <li>Improvement efforts are sustained, focused, and cumulative — schools select a small number of high-leverage instructional priorities and pursue them over multiple years.</li>
+        <li>Assessment practices serve instructional purposes — providing timely, actionable feedback to both students and educators about conceptual understanding, computational thinking, and coding proficiency.</li>
+        <li>Equity is an explicit and ongoing object of continuous improvement — using participation and outcomes data to identify and address structural barriers.</li>
+        <li>CS and AI improvement efforts connect to broader professional networks and research-practice partnerships that supply curriculum-aligned assessments and cross-school learning.</li>
+      </ul>
+    </div>
+    <div class="ep-section"><div class="ep-section-label">What it looks like in a strong Computational Literacy design</div>
+      <div class="what-box"><div class="wb-title">Data systems are aligned to Computational Literacy learning outcomes.</div><div class="wb-body">LMS and data review processes track Computational Literacy learning outcomes, culture, perception, and student engagement — not just usage metrics.</div></div>
+      <div class="what-box"><div class="wb-title">Evaluation and adaptation happen regularly.</div><div class="wb-body">Computational Literacy classroom observations, data review meetings, and surveys monitor implementation fidelity, workload, and educator mindsets. Findings drive adjustments, not just documentation.</div></div>
+      <div class="what-box"><div class="wb-title">AI tool effectiveness is continuously evaluated.</div><div class="wb-body">How AI platforms and tools are used in instruction, their impact on student learning and educator practice, and stakeholder feedback on AI integration all inform ongoing decisions.</div></div>
+    </div>
+    <div class="ep-section"><div class="ep-section-label">Common challenges & design responses</div>
+      <div class="challenge-grid">
+        <div class="challenge-card"><div class="cc-label challenge">Challenge</div><div class="wb-body">Assessment instruments for CS and AI literacy are still in development. Districts often evaluate AI education through usage metrics rather than learning outcomes.</div></div>
+        <div class="challenge-card"><div class="cc-label response">Design response</div><div class="wb-body">Develop curriculum-based assessments rather than waiting for standardized tests. Use student work, debugging logs, and project portfolios as evidence of learning. Connect to research-practice partnerships developing better instruments.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer"><strong>Transcend partners with communities to create and spread extraordinary learning for all.</strong></div>
+</div>
+
+</div><!-- end elements tab-panel -->
+
+<!-- ═══════════════════════════════════════
+     TAB 6 — SEE IT IN ACTION
+════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-seeit">
+  <div class="print-bar">
+    <button class="btn-print" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>Print</button>
+  </div>
+  <div class="eyebrow">Computational Literacy · Design Guidance</div>
+  <h1>See it in action</h1>
+  <div class="rule"></div>
+  <p class="intro">Examples of Computational Literacy design in real schools — and a guide to the types of programs communities are building.</p>
+
+  <div class="section-label">School profiles</div>
+  <p class="intro-body" style="margin-bottom:1.5rem;">Five schools and networks putting Computational Literacy design into practice — each with a distinct model, context, and approach. Select any to view the full profile.</p>
+
+  <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:2.5rem;">
+
+    <div style="border:1px solid #dde3ec;border-left:4px solid #EF464B;background:#fff;padding:20px 24px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start;">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#59C3B4;margin-bottom:4px;">Middle School · Grades 5–8</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#1A4C81;letter-spacing:0.03em;margin-bottom:2px;">Creo College Prep</div>
+        <div style="font-size:13px;color:#888;margin-bottom:10px;">South Bronx, New York · 360 students · 100% Free & Reduced Lunch</div>
+        <p style="font-size:14px;color:#444;line-height:1.7;margin:0;">A charter middle school where CS is a core subject — not an elective — for every student in grades 5–8. Students follow a four-year scaffolded pathway from foundational digital skills through programming and physical computing, taught by a dedicated CS educator at each grade level. Curriculum is grounded in community-driven projects anchored in the South Bronx.</p>
+      </div>
+      <div style="flex-shrink:0;">
+        <a href="https://drive.google.com/file/d/1_creo_placeholder" target="_blank" style="display:inline-block;font-size:12px;font-weight:700;padding:9px 18px;border:1.5px solid #1A4C81;color:#1A4C81;background:#fff;text-decoration:none;font-family:'Open Sans',sans-serif;letter-spacing:0.03em;white-space:nowrap;">View profile →</a>
+      </div>
+    </div>
+
+    <div style="border:1px solid #dde3ec;border-left:4px solid #EF464B;background:#fff;padding:20px 24px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start;">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#59C3B4;margin-bottom:4px;">High School · Grades 9–12</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#1A4C81;letter-spacing:0.03em;margin-bottom:2px;">Comp Sci High</div>
+        <div style="font-size:13px;color:#888;margin-bottom:10px;">South Bronx, New York · 494 students · 90% Free & Reduced Lunch</div>
+        <p style="font-size:14px;color:#444;line-height:1.7;margin:0;">New York City's first Career and Technical Education (CTE) charter high school, making computer science a core subject for all four years. Students advance from 9th-grade web design and foundational CS to self-selected career pathways in Software Engineering, Cybersecurity, or UX/Graphic Design — completing work-based learning through internships.</p>
+      </div>
+      <div style="flex-shrink:0;">
+        <a href="https://drive.google.com/file/d/1_compsci_placeholder" target="_blank" style="display:inline-block;font-size:12px;font-weight:700;padding:9px 18px;border:1.5px solid #1A4C81;color:#1A4C81;background:#fff;text-decoration:none;font-family:'Open Sans',sans-serif;letter-spacing:0.03em;white-space:nowrap;">View profile →</a>
+      </div>
+    </div>
+
+    <div style="border:1px solid #dde3ec;border-left:4px solid #EF464B;background:#fff;padding:20px 24px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start;">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#59C3B4;margin-bottom:4px;">High School · Grades 9–12</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#1A4C81;letter-spacing:0.03em;margin-bottom:2px;">Rooted School</div>
+        <div style="font-size:13px;color:#888;margin-bottom:10px;">New Orleans, Louisiana · 152 students · 63% Free & Reduced Lunch</div>
+        <p style="font-size:14px;color:#444;line-height:1.7;margin:0;">A public charter high school built around one mission: every student graduates with a job offer in one hand and a college acceptance in the other. Located on the SUNO campus, Rooted organizes its entire curriculum around the digital sector — with paid internships starting in 9th grade, Fridays dedicated to workplace learning, and projects co-designed with tech industry partners.</p>
+      </div>
+      <div style="flex-shrink:0;">
+        <a href="https://drive.google.com/file/d/1_rooted_placeholder" target="_blank" style="display:inline-block;font-size:12px;font-weight:700;padding:9px 18px;border:1.5px solid #1A4C81;color:#1A4C81;background:#fff;text-decoration:none;font-family:'Open Sans',sans-serif;letter-spacing:0.03em;white-space:nowrap;">View profile →</a>
+      </div>
+    </div>
+
+    <div style="border:1px solid #dde3ec;border-left:4px solid #EF464B;background:#fff;padding:20px 24px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start;">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#59C3B4;margin-bottom:4px;">K–12 Network · Grades PK–12</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#1A4C81;letter-spacing:0.03em;margin-bottom:2px;">Harmony Public Schools</div>
+        <div style="font-size:13px;color:#888;margin-bottom:10px;">Texas (61 campuses) · 3,111 students (4 Austin campuses) · 67% Free & Reduced Lunch</div>
+        <p style="font-size:14px;color:#444;line-height:1.7;margin:0;">A 61-school STEM-focused public charter network serving students across Texas. All students in K–8 participate in structured CS and computational thinking as a core subject. In high school, students choose from ten CTE pathways — four of which include computational literacy content — with opportunities for AP CS and industry certifications. Industry partners include AMD, Amazon, Samsung, and UT Austin.</p>
+      </div>
+      <div style="flex-shrink:0;">
+        <a href="https://drive.google.com/file/d/1_harmony_placeholder" target="_blank" style="display:inline-block;font-size:12px;font-weight:700;padding:9px 18px;border:1.5px solid #1A4C81;color:#1A4C81;background:#fff;text-decoration:none;font-family:'Open Sans',sans-serif;letter-spacing:0.03em;white-space:nowrap;">View profile →</a>
+      </div>
+    </div>
+
+    <div style="border:1px solid #dde3ec;border-left:4px solid #EF464B;background:#fff;padding:20px 24px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start;">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#59C3B4;margin-bottom:4px;">K–12 Network · Grades K–12</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#1A4C81;letter-spacing:0.03em;margin-bottom:2px;">RePublic Schools</div>
+        <div style="font-size:13px;color:#888;margin-bottom:10px;">Jackson, Mississippi & Nashville, Tennessee · 2,970 students · 69% Free & Reduced Lunch</div>
+        <p style="font-size:14px;color:#444;line-height:1.7;margin:0;">A seven-school charter network providing computer science as a standalone subject to every student from kindergarten through 10th grade. Students progress from playful, hands-on computational thinking in elementary school to app-building and data work in middle school — then choose between AP CS, industry preparation, or an arts-focused pathway in high school. Partnerships with Blacks in Technology and Nashville Software School explicitly connect learning to real-world careers.</p>
+      </div>
+      <div style="flex-shrink:0;">
+        <a href="https://drive.google.com/file/d/1_republic_placeholder" target="_blank" style="display:inline-block;font-size:12px;font-weight:700;padding:9px 18px;border:1.5px solid #1A4C81;color:#1A4C81;background:#fff;text-decoration:none;font-family:'Open Sans',sans-serif;letter-spacing:0.03em;white-space:nowrap;">View profile →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-label">Types of Computational Literacy programs</div>
+  <div style="border:1.5px dashed #ADE0EE;padding:48px 32px;text-align:center;margin-bottom:2rem;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#ADE0EE;letter-spacing:0.04em;margin-bottom:10px;">Content under construction</div>
+    <p style="font-size:14px;color:#888;max-width:500px;margin:0 auto;">A guide to the models, structures, and program types communities are using to deliver Computational Literacy will be added here.</p>
+  </div>
+
+  <div class="page-footer"><strong>Transcend partners with communities to create and spread extraordinary learning for all.</strong></div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB 7 — PILOTING & IMPLEMENTATION
+════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-piloting">
+  <div class="print-bar">
+    <button class="btn-print" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>Print</button>
+  </div>
+  <div class="eyebrow">Computational Literacy · Design Guidance</div>
+  <h1>Piloting & implementation resources</h1>
+  <div class="rule"></div>
+  <p class="intro">Tools, protocols, and resources to support communities in piloting and implementing Computational Literacy design.</p>
+
+  <div class="section-label">Curriculum-based pilots</div>
+  <div style="border:1.5px dashed #ADE0EE;padding:48px 32px;text-align:center;margin-bottom:2rem;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#ADE0EE;letter-spacing:0.04em;margin-bottom:10px;">Content under construction</div>
+    <p style="font-size:14px;color:#888;max-width:500px;margin:0 auto;">Curriculum pilot guides, implementation protocols, and launch resources will be added here.</p>
+  </div>
+
+  <div class="section-label">Instructional pilots</div>
+  <div style="border:1.5px dashed #ADE0EE;padding:48px 32px;text-align:center;margin-bottom:2rem;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#ADE0EE;letter-spacing:0.04em;margin-bottom:10px;">Content under construction</div>
+    <p style="font-size:14px;color:#888;max-width:500px;margin:0 auto;">Data review session templates, lesson internalization protocols, and other instructional pilot resources will be added here.</p>
+  </div>
+
+  <div class="section-label">Research & design pilots</div>
+  <div style="border:1.5px dashed #ADE0EE;padding:48px 32px;text-align:center;margin-bottom:2rem;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#ADE0EE;letter-spacing:0.04em;margin-bottom:10px;">Content under construction</div>
+    <p style="font-size:14px;color:#888;max-width:500px;margin:0 auto;">Student interview pilots, teacher survey pilots, community input and design day resources will be added here.</p>
+  </div>
+
+  <div class="page-footer"><strong>Transcend partners with communities to create and spread extraordinary learning for all.</strong></div>
+</div>
+
+</div><!-- end .page -->
+
+<script>
+let carouselOffset = 0;
+let activeCarouselIdx = 0;
+
+function updateCarousel() {
+  const track = document.getElementById('carousel-track');
+  if (track) track.style.transform = 'translateX(-' + (carouselOffset * 50) + '%)';
+}
+
+function carouselNext() {
+  if (carouselOffset < 1) { carouselOffset++; updateCarousel(); }
+}
+function carouselPrev() {
+  if (carouselOffset > 0) { carouselOffset--; updateCarousel(); }
+}
+
+function toggleCarouselLeap(id, el) {
+  document.querySelectorAll('.carousel-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.leap-carousel-detail').forEach(d => d.classList.remove('visible'));
+  el.classList.add('active');
+  document.getElementById(id).classList.add('visible');
+  activeCarouselIdx = parseInt(el.dataset.index);
+}
+
+document.addEventListener('DOMContentLoaded', function() { updateCarousel(); });
+
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  const idx = {overview:0, opportunity:1, outcomes:2, experience:3, elements:4, seeit:5, piloting:6}[id];
+  document.querySelectorAll('.nav-tab')[idx].classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function toggleTrend(id) {
+  const body = document.getElementById(id);
+  const toggle = document.getElementById('t' + id);
+  const open = body.classList.contains('open');
+  body.classList.toggle('open', !open);
+  toggle.textContent = open ? 'Show ↓' : 'Hide ↑';
+}
+
+let activeLeap = null;
+const leapMap = {whole:'ld-whole',connect:'ld-connect',high:'ld-high',rel:'ld-rel',custom:'ld-custom',agency:'ld-agency'};
+function toggleLeap(id, el) {
+  document.querySelectorAll('.leap-detail').forEach(d => d.classList.remove('visible'));
+  document.querySelectorAll('.leap-card').forEach(c => c.classList.remove('active'));
+  if (activeLeap === id) { activeLeap = null; return; }
+  document.getElementById(leapMap[id]).classList.add('visible');
+  el.classList.add('active');
+  activeLeap = id;
+}
+
+function showDomain(n) {
+  document.querySelectorAll('.domain-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.domain-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('dp-'+n).classList.add('active');
+  document.querySelectorAll('.domain-tab')[n-1].classList.add('active');
+}
+
+function showExp(id) {
+  document.querySelectorAll('.exp-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.exp-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('exp-'+id).classList.add('active');
+  const idx = {core:0, enrichment:1, intervention:2}[id];
+  document.querySelectorAll('.exp-tab')[idx].classList.add('active');
+}
+
+function showElement(id) {
+  document.querySelectorAll('.element-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.en-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('ep-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  document.querySelector('.elem-nav-grid').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+</script>
+</body>
+</html>
