@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COMP3+AI — Full Leveled Standards</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Open Sans', sans-serif; background: #f7f8fa; color: #1a1a1a; line-height: 1.6; }
+  .page { max-width: 900px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+
+  .eyebrow { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #59C3B4; font-weight: 700; margin-bottom: 8px; }
+  h1 { font-size: 26px; font-weight: 700; color: #1A4C81; line-height: 1.2; margin-bottom: 10px; }
+  .intro { font-size: 14px; color: #555; line-height: 1.7; margin-bottom: 2rem; max-width: 680px; }
+  .rule { height: 3px; width: 40px; background: #EF464B; margin-bottom: 2rem; }
+
+  .nav-pills { display: flex; gap: 8px; margin-bottom: 2rem; flex-wrap: wrap; }
+  .nav-pill { font-size: 11px; padding: 5px 12px; border-radius: 20px; border: 1px solid #dde3ec; background: #fff; color: #555; font-weight: 600; }
+  .nav-pill.current { background: #1A4C81; color: #fff; border-color: #1A4C81; }
+
+  /* Controls */
+  .controls { display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center; }
+  .filter-label { font-size: 12px; color: #888; font-weight: 600; }
+  select { font-size: 12px; padding: 6px 10px; border: 1px solid #dde3ec; border-radius: 6px; background: #fff; color: #1a1a1a; font-family: 'Open Sans', sans-serif; }
+  .search-wrap { flex: 1; min-width: 200px; }
+  .search-wrap input { width: 100%; font-size: 12px; padding: 6px 10px; border: 1px solid #dde3ec; border-radius: 6px; font-family: 'Open Sans', sans-serif; }
+
+  /* Domain headers */
+  .domain-header { background: #1A4C81; color: #fff; padding: 14px 20px; border-radius: 8px 8px 0 0; margin-top: 2rem; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+  .domain-header:first-of-type { margin-top: 0; }
+  .dh-left { display: flex; align-items: center; gap: 12px; }
+  .dh-num { font-size: 22px; font-weight: 700; opacity: 0.4; }
+  .dh-title { font-size: 14px; font-weight: 700; }
+  .dh-toggle { font-size: 14px; opacity: 0.7; }
+  .domain-body { border: 1px solid #dde3ec; border-top: none; border-radius: 0 0 8px 8px; background: #fff; }
+
+  /* Skill sections */
+  .skill-section { border-bottom: 1px solid #eef0f4; }
+  .skill-section:last-child { border-bottom: none; }
+  .skill-header { padding: 14px 20px; cursor: pointer; display: flex; align-items: flex-start; gap: 12px; }
+  .skill-header:hover { background: #fafbfd; }
+  .sh-code { font-size: 12px; font-weight: 700; color: #1A4C81; white-space: nowrap; flex-shrink: 0; width: 32px; }
+  .sh-right { flex: 1; }
+  .sh-name { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 3px; }
+  .sh-intent { font-size: 12px; color: #666; line-height: 1.5; }
+  .sh-toggle { font-size: 11px; color: #1A4C81; font-weight: 600; flex-shrink: 0; margin-top: 2px; white-space: nowrap; }
+  .ai-mark { display: inline-block; font-size: 9px; background: #d4f0e5; color: #085041; padding: 1px 5px; border-radius: 8px; font-weight: 700; margin-left: 4px; }
+
+  .skill-detail { display: none; padding: 0 20px 20px 64px; }
+  .skill-detail.open { display: block; }
+
+  /* Level grid */
+  .level-header-row { display: grid; grid-template-columns: 80px repeat(4, 1fr); gap: 0; margin-bottom: 0; }
+  .lh-cell { font-size: 10px; font-weight: 700; color: #888; letter-spacing: 0.08em; text-transform: uppercase; padding: 8px 12px; background: #f5f6f9; border: 1px solid #eee; text-align: center; }
+  .lh-cell:first-child { border-radius: 6px 0 0 0; }
+  .lh-cell:last-child { border-radius: 0 6px 0 0; }
+
+  .level-row { display: grid; grid-template-columns: 80px repeat(4, 1fr); gap: 0; }
+  .level-row + .level-row .lr-cell { border-top: none; }
+  .lr-label { font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; padding: 10px 12px; border: 1px solid #eee; background: #f5f6f9; display: flex; flex-direction: column; justify-content: center; }
+  .lr-cell { font-size: 12px; color: #444; padding: 10px 12px; border: 1px solid #eee; line-height: 1.55; vertical-align: top; }
+  .lr-cell.l1 { background: #fdfeff; }
+  .lr-cell.l2 { background: #fdfffe; }
+  .lr-cell.l3 { background: #fefff9; }
+  .lr-cell.l4 { background: #fffdf9; }
+
+  .example-row { display: grid; grid-template-columns: 80px repeat(4, 1fr); gap: 0; }
+  .ex-label { font-size: 10px; font-weight: 700; color: #EF464B; text-transform: uppercase; padding: 10px 12px; border: 1px solid #eee; border-top: none; background: #fff8f8; display: flex; align-items: center; }
+  .ex-cell { font-size: 11px; color: #555; padding: 10px 12px; border: 1px solid #eee; border-top: none; line-height: 1.55; background: #fff8f8; }
+
+  .level-grade { font-size: 9px; color: #aaa; margin-top: 2px; }
+  .show-examples { font-size: 11px; color: #EF464B; font-weight: 600; cursor: pointer; margin-top: 10px; display: inline-block; }
+
+  .no-results { padding: 2rem; text-align: center; font-size: 13px; color: #888; }
+
+  @media (max-width: 640px) {
+    .level-header-row, .level-row, .example-row { grid-template-columns: 60px repeat(2, 1fr); }
+    .lh-cell:nth-child(4), .lh-cell:nth-child(5),
+    .lr-cell.l3, .lr-cell.l4, .ex-cell:nth-child(4), .ex-cell:nth-child(5) { display: none; }
+    .skill-detail { padding-left: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="eyebrow">Computational + AI Literacy · Design Framework</div>
+  <h1>Full leveled standards</h1>
+  <p class="intro">Synthesized standards, descriptions, and classroom examples for every knowledge and skill area, organized across four developmental levels. Levels correspond to grade bands: Level 1 (K–2), Level 2 (3–5), Level 3 (6–8), Level 4 (9–12).</p>
+  <div class="rule"></div>
+
+  <div class="nav-pills">
+    <div class="nav-pill">Tier 1 · Orientation</div>
+    <div class="nav-pill">Tier 2 · Domain Summaries</div>
+    <div class="nav-pill current">Tier 3 · Full Standards</div>
+    <div class="nav-pill">School Elements</div>
+  </div>
+
+  <div class="controls">
+    <span class="filter-label">Filter by domain:</span>
+    <select id="domainFilter" onchange="filterContent()">
+      <option value="all">All domains</option>
+      <option value="d1">1 · AI Literacy</option>
+      <option value="d2">2 · Computational Thinking</option>
+      <option value="d3">3 · Computer Science</option>
+      <option value="d4">4 · Computing</option>
+      <option value="d5">5 · Digital Literacy</option>
+      <option value="d6">6 · Career Learning</option>
+    </select>
+    <span class="filter-label">AI skills only:</span>
+    <select id="aiFilter" onchange="filterContent()">
+      <option value="all">Show all</option>
+      <option value="ai">AI-related only ✦</option>
+    </select>
+    <div class="search-wrap">
+      <input type="text" id="searchBox" placeholder="Search standards..." oninput="filterContent()">
+    </div>
+  </div>
+
+  <div id="standards-content">
+
+  <!-- DOMAIN 1 -->
+  <div class="domain-block" data-domain="d1">
+    <div class="domain-header" onclick="toggleDomain(this)">
+      <div class="dh-left"><div class="dh-num">1</div><div class="dh-title">Foundations of Artificial Intelligence Literacy</div></div>
+      <div class="dh-toggle">▼</div>
+    </div>
+    <div class="domain-body">
+
+      <div class="skill-section" data-ai="true">
+        <div class="skill-header" onclick="toggleSkill(this)">
+          <div class="sh-code">1.1</div>
+          <div class="sh-right">
+            <div class="sh-name">Understanding AI Systems <span class="ai-mark">✦</span></div>
+            <div class="sh-intent">Comprehend AI capabilities, limitations, and how AI systems operate — including machine learning, training data, and pattern recognition.</div>
+          </div>
+          <div class="sh-toggle">Show levels ↓</div>
+        </div>
+        <div class="skill-detail">
+          <div class="level-header-row">
+            <div class="lh-cell"></div>
+            <div class="lh-cell">Level 1<div class="level-grade">K–2</div></div>
+            <div class="lh-cell">Level 2<div class="level-grade">3–5</div></div>
+            <div class="lh-cell">Level 3<div class="level-grade">6–8</div></div>
+            <div class="lh-cell">Level 4<div class="level-grade">9–12</div></div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Standard</div>
+            <div class="lr-cell l1">Explain that computers and AI systems use data to respond to inputs and perform tasks.</div>
+            <div class="lr-cell l2">Explain how AI learns from data examples and identify AI in everyday applications.</div>
+            <div class="lr-cell l3">Describe how machine learning systems are trained, evaluate model limitations, and investigate an AI system's behavior.</div>
+            <div class="lr-cell l4">Train, test, and evaluate AI models; analyze how data choices affect outcomes, fairness, and accuracy.</div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Description</div>
+            <div class="lr-cell l1">Students recognize basic differences between regular programs and AI, understanding that AI responds differently based on what it has learned.</div>
+            <div class="lr-cell l2">Students define AI, explain how it learns from data, and recognize it in recommendation systems, voice assistants, and image recognition tools.</div>
+            <div class="lr-cell l3">Students investigate an AI system's capabilities and limitations, describe machine learning concepts, and examine how training data shapes model behavior.</div>
+            <div class="lr-cell l4">Students train a sentiment analysis or classification model, test with new data, evaluate bias and accuracy, and propose enhancements based on results.</div>
+          </div>
+          <span class="show-examples" onclick="toggleExamples(this)">Show classroom examples ↓</span>
+          <div class="example-row" style="display:none;">
+            <div class="ex-label">Example</div>
+            <div class="ex-cell">Students observe a smart speaker and explain: "The AI listens, finds information, and tells us the answer." They discuss other AI they see — like videos being recommended.</div>
+            <div class="ex-cell">Students define AI as "technology that finds patterns in lots of information to predict things." They examine a recommendation system and explain how it collects data and predicts preferences.</div>
+            <div class="ex-cell">Students investigate an image recognition AI. They create a model card: what it was trained to identify, what training data was used, its limitations, and potential biases.</div>
+            <div class="ex-cell">Students train a sentiment analysis AI on social media data. They test with new inputs, evaluate for bias across groups, and propose improvements.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="skill-section" data-ai="true">
+        <div class="skill-header" onclick="toggleSkill(this)">
+          <div class="sh-code">1.2</div>
+          <div class="sh-right">
+            <div class="sh-name">Evaluating AI Outputs <span class="ai-mark">✦</span></div>
+            <div class="sh-intent">Critically assess AI-generated content and predictions for bias, accuracy, appropriateness, and potential harms.</div>
+          </div>
+          <div class="sh-toggle">Show levels ↓</div>
+        </div>
+        <div class="skill-detail">
+          <div class="level-header-row">
+            <div class="lh-cell"></div>
+            <div class="lh-cell">Level 1<div class="level-grade">K–2</div></div>
+            <div class="lh-cell">Level 2<div class="level-grade">3–5</div></div>
+            <div class="lh-cell">Level 3<div class="level-grade">6–8</div></div>
+            <div class="lh-cell">Level 4<div class="level-grade">9–12</div></div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Standard</div>
+            <div class="lr-cell l1">Ask questions about AI-generated content and identify whether information from AI is correct or makes sense.</div>
+            <div class="lr-cell l2">Compare strengths and weaknesses of AI tools, evaluate whether AI outputs are factual, and determine when AI is appropriate to use.</div>
+            <div class="lr-cell l3">Critically evaluate AI outputs for bias, accuracy, limitations, and potential harms, and experiment with different inputs to understand how they affect outputs.</div>
+            <div class="lr-cell l4">Conduct comprehensive evaluations of AI systems including bias analysis, accuracy assessment, ethical implications, and reliability across different scenarios and user groups.</div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Description</div>
+            <div class="lr-cell l1">Students learn to be curious about AI outputs and can discuss with guidance whether responses from AI tools seem reasonable or need checking.</div>
+            <div class="lr-cell l2">Students critically examine AI outputs by checking sources, comparing with known information, and identifying situations where AI helps or doesn't help.</div>
+            <div class="lr-cell l3">Students systematically assess AI-generated content, test AI tools with different prompts, identify biases in training data or outputs, and evaluate appropriateness for different contexts.</div>
+            <div class="lr-cell l4">Students perform rigorous analysis of AI outputs, use evaluation metrics, identify systemic biases, assess fairness across demographic groups, and make recommendations for improving or limiting AI tools.</div>
+          </div>
+          <span class="show-examples" onclick="toggleExamples(this)">Show classroom examples ↓</span>
+          <div class="example-row" style="display:none;">
+            <div class="ex-label">Example</div>
+            <div class="ex-cell">After using an AI drawing tool, students discuss: "Did the AI draw what I asked for?" They practice asking "Is this right?" about AI-generated answers.</div>
+            <div class="ex-cell">Students use an AI chatbot for research, verify facts with multiple sources, and identify that AI is helpful for brainstorming but may not be accurate for historical dates.</div>
+            <div class="ex-cell">Students test an AI text generator with different prompts on the same topic, document output changes, spot biased language, and create class guidelines for when to trust AI responses.</div>
+            <div class="ex-cell">Students evaluate a college admissions AI system — analyzing predictions across demographic groups, identifying biases, measuring fairness metrics, and recommending improvements.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="skill-section" data-ai="true">
+        <div class="skill-header" onclick="toggleSkill(this)">
+          <div class="sh-code">1.3</div>
+          <div class="sh-right">
+            <div class="sh-name">Human vs. AI Capabilities <span class="ai-mark">✦</span></div>
+            <div class="sh-intent">Distinguish between activities humans do well and those AI systems do well, including differences in learning approaches and determining appropriate human involvement.</div>
+          </div>
+          <div class="sh-toggle">Show levels ↓</div>
+        </div>
+        <div class="skill-detail">
+          <div class="level-header-row">
+            <div class="lh-cell"></div>
+            <div class="lh-cell">Level 1<div class="level-grade">K–2</div></div>
+            <div class="lh-cell">Level 2<div class="level-grade">3–5</div></div>
+            <div class="lh-cell">Level 3<div class="level-grade">6–8</div></div>
+            <div class="lh-cell">Level 4<div class="level-grade">9–12</div></div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Standard</div>
+            <div class="lr-cell l1">Describe activities that humans do well and activities that computers do well.</div>
+            <div class="lr-cell l2">Differentiate between tasks that humans perform well and tasks that AI performs well, and explain why certain tasks require human judgment.</div>
+            <div class="lr-cell l3">Distinguish between how humans learn and how AI systems learn, and evaluate when human expertise is essential versus when AI augmentation is helpful.</div>
+            <div class="lr-cell l4">Analyze the complementary strengths of humans and AI, evaluate human agency in AI-driven systems, and make informed decisions about appropriate human involvement in AI workflows.</div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Description</div>
+            <div class="lr-cell l1">Students recognize basic differences: humans are good at creative thinking and caring; computers are fast at calculations and following rules.</div>
+            <div class="lr-cell l2">Students understand that humans excel at creative problem-solving, empathy, and complex decision-making while AI excels at pattern recognition and data processing.</div>
+            <div class="lr-cell l3">Students compare human learning (concepts, transfer, few examples) with AI learning (pattern recognition from large datasets) and determine appropriate human-AI collaboration.</div>
+            <div class="lr-cell l4">Students examine AI's limitations in ethical reasoning and creativity. They design systems that preserve meaningful human control in critical decisions.</div>
+          </div>
+          <span class="show-examples" onclick="toggleExamples(this)">Show classroom examples ↓</span>
+          <div class="example-row" style="display:none;">
+            <div class="ex-label">Example</div>
+            <div class="ex-cell">Students sort activities into "humans do better" (comforting friends, creative tasks) and "computers do better" (fast calculations, memory, repetition).</div>
+            <div class="ex-cell">Students create a chart comparing AI strengths (sorting images) with human strengths (understanding emotions and fairness), then discuss why teachers — not AI — should handle classroom conflicts.</div>
+            <div class="ex-cell">Students compare how they learn to identify birds (observation, field trips) with how AI learns (labeled images), then design an app combining AI recognition with human expert verification.</div>
+            <div class="ex-cell">Students analyze medical diagnostic AI, comparing AI strengths (pattern detection) with human expertise (patient context), then propose a workflow with appropriate human oversight safeguards.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DOMAIN 2 -->
+  <div class="domain-block" data-domain="d2">
+    <div class="domain-header" onclick="toggleDomain(this)">
+      <div class="dh-left"><div class="dh-num">2</div><div class="dh-title">Computational Thinking</div></div>
+      <div class="dh-toggle">▼</div>
+    </div>
+    <div class="domain-body">
+
+      <div class="skill-section" data-ai="false">
+        <div class="skill-header" onclick="toggleSkill(this)">
+          <div class="sh-code">2.1</div>
+          <div class="sh-right">
+            <div class="sh-name">Problem Decomposition</div>
+            <div class="sh-intent">Break complex problems into manageable components and create modular solutions that can be developed and tested independently.</div>
+          </div>
+          <div class="sh-toggle">Show levels ↓</div>
+        </div>
+        <div class="skill-detail">
+          <div class="level-header-row">
+            <div class="lh-cell"></div>
+            <div class="lh-cell">Level 1<div class="level-grade">K–2</div></div>
+            <div class="lh-cell">Level 2<div class="level-grade">3–5</div></div>
+            <div class="lh-cell">Level 3<div class="level-grade">6–8</div></div>
+            <div class="lh-cell">Level 4<div class="level-grade">9–12</div></div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Standard</div>
+            <div class="lr-cell l1">Break simple problems into smaller, manageable steps that can be completed in order.</div>
+            <div class="lr-cell l2">Decompose multi-step problems into smaller subproblems that can be solved independently and then combined.</div>
+            <div class="lr-cell l3">Systematically decompose complex problems, identify dependencies between subproblems, and create modular solutions that can be developed and tested independently.</div>
+            <div class="lr-cell l4">Apply advanced decomposition strategies to ill-defined problems, design modular architectures, and evaluate trade-offs in problem decomposition approaches.</div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Description</div>
+            <div class="lr-cell l1">Students learn to think about problems as a series of steps, identifying what needs to happen first, next, and last to accomplish a goal.</div>
+            <div class="lr-cell l2">Students break complex tasks into parts, solve each part separately, and understand how the parts work together to solve the whole problem.</div>
+            <div class="lr-cell l3">Students analyze problem complexity, identify which parts depend on others, create modular designs where components can be developed separately, and integrate solutions.</div>
+            <div class="lr-cell l4">Students tackle ambiguous problems, apply decomposition strategies, design modular systems, and evaluate approaches for maintainability, efficiency, and collaboration.</div>
+          </div>
+          <span class="show-examples" onclick="toggleExamples(this)">Show classroom examples ↓</span>
+          <div class="example-row" style="display:none;">
+            <div class="ex-label">Example</div>
+            <div class="ex-cell">Students plan how to make a peanut butter sandwich by listing steps in order. They practice ordering steps for daily routines like getting ready for school.</div>
+            <div class="ex-cell">Students plan a class fundraiser by breaking it into parts: deciding what to sell, calculating costs, creating advertising, organizing volunteers. Each team handles one part, then combines their work.</div>
+            <div class="ex-cell">Students design a school website by decomposing it into modules (navigation, home page, clubs, calendar, contact form). They identify dependencies and assign teams to each module.</div>
+            <div class="ex-cell">Students decompose school food waste into systems (measurement, behavior, operations, donations), design modular solutions with shared data, and evaluate strategies for iteration and collaboration.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="skill-section" data-ai="true">
+        <div class="skill-header" onclick="toggleSkill(this)">
+          <div class="sh-code">2.2</div>
+          <div class="sh-right">
+            <div class="sh-name">Pattern Recognition & Analysis <span class="ai-mark">✦</span></div>
+            <div class="sh-intent">Identify patterns and trends in data, sequences, and problems to develop general solutions and make informed predictions.</div>
+          </div>
+          <div class="sh-toggle">Show levels ↓</div>
+        </div>
+        <div class="skill-detail">
+          <div class="level-header-row">
+            <div class="lh-cell"></div>
+            <div class="lh-cell">Level 1<div class="level-grade">K–2</div></div>
+            <div class="lh-cell">Level 2<div class="level-grade">3–5</div></div>
+            <div class="lh-cell">Level 3<div class="level-grade">6–8</div></div>
+            <div class="lh-cell">Level 4<div class="level-grade">9–12</div></div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Standard</div>
+            <div class="lr-cell l1">Identify simple repeating patterns in sequences, images, and everyday situations.</div>
+            <div class="lr-cell l2">Recognize and analyze patterns in data, sequences, and problems to identify trends and make predictions.</div>
+            <div class="lr-cell l3">Identify complex patterns and trends in large datasets, analyze recurring structures in problems, and use pattern recognition to develop general solutions.</div>
+            <div class="lr-cell l4">Employ sophisticated pattern recognition techniques including statistical analysis, trend identification, anomaly detection, and pattern-based prediction in complex systems.</div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Description</div>
+            <div class="lr-cell l1">Students recognize patterns — repetition, color sequences, predictable events — in their environment.</div>
+            <div class="lr-cell l2">Students find patterns in numbers, data, and problem-solving approaches; use them to predict what comes next; and apply pattern recognition to simplify problems.</div>
+            <div class="lr-cell l3">Students detect patterns across multiple variables, identify similarities between different problem types, and abstract common patterns into generalizable approaches.</div>
+            <div class="lr-cell l4">Students use advanced analytical methods to identify subtle patterns, distinguish signal from noise, detect anomalies, and develop predictive models based on pattern analysis.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="skill-section" data-ai="true">
+        <div class="skill-header" onclick="toggleSkill(this)">
+          <div class="sh-code">2.7</div>
+          <div class="sh-right">
+            <div class="sh-name">Creativity & Design Thinking <span class="ai-mark">✦</span></div>
+            <div class="sh-intent">Apply creative problem-solving approaches, design thinking processes, and innovation methodologies to generate novel solutions to computing challenges.</div>
+          </div>
+          <div class="sh-toggle">Show levels ↓</div>
+        </div>
+        <div class="skill-detail">
+          <div class="level-header-row">
+            <div class="lh-cell"></div>
+            <div class="lh-cell">Level 1<div class="level-grade">K–2</div></div>
+            <div class="lh-cell">Level 2<div class="level-grade">3–5</div></div>
+            <div class="lh-cell">Level 3<div class="level-grade">6–8</div></div>
+            <div class="lh-cell">Level 4<div class="level-grade">9–12</div></div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Standard</div>
+            <div class="lr-cell l1">Generate multiple ideas for solving simple problems and create simple programs or artifacts that express creativity.</div>
+            <div class="lr-cell l2">Apply design thinking to identify user needs, generate multiple solutions, and iteratively improve based on feedback.</div>
+            <div class="lr-cell l3">Use design thinking processes to develop innovative solutions — including user research, prototyping, testing, and iteration.</div>
+            <div class="lr-cell l4">Apply advanced design methodologies to complex challenges — systems design, service design, speculative design — balancing innovation with feasibility.</div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Description</div>
+            <div class="lr-cell l1">Students brainstorm different ways to solve problems, understanding that there can be more than one correct solution.</div>
+            <div class="lr-cell l2">Students empathize with users, define problems, ideate solutions, prototype, and test — iterating based on user feedback.</div>
+            <div class="lr-cell l3">Students conduct user research, create prototypes, test solutions with real users, and refine based on findings — connecting creativity with structured process.</div>
+            <div class="lr-cell l4">Students tackle complex, open-ended challenges by applying advanced design frameworks, balancing creative exploration with technical and social constraints.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DOMAIN 5 — Digital Literacy (shown as representative sample) -->
+  <div class="domain-block" data-domain="d5">
+    <div class="domain-header" onclick="toggleDomain(this)">
+      <div class="dh-left"><div class="dh-num">5</div><div class="dh-title">Digital Literacy</div></div>
+      <div class="dh-toggle">▼</div>
+    </div>
+    <div class="domain-body">
+
+      <div class="skill-section" data-ai="false">
+        <div class="skill-header" onclick="toggleSkill(this)">
+          <div class="sh-code">5.1</div>
+          <div class="sh-right">
+            <div class="sh-name">Digital Citizenship & Responsibility</div>
+            <div class="sh-intent">Practice responsible online behavior including protecting privacy, managing digital footprint, demonstrating appropriate etiquette, and responding to cyberbullying.</div>
+          </div>
+          <div class="sh-toggle">Show levels ↓</div>
+        </div>
+        <div class="skill-detail">
+          <div class="level-header-row">
+            <div class="lh-cell"></div>
+            <div class="lh-cell">Level 1<div class="level-grade">K–2</div></div>
+            <div class="lh-cell">Level 2<div class="level-grade">3–5</div></div>
+            <div class="lh-cell">Level 3<div class="level-grade">6–8</div></div>
+            <div class="lh-cell">Level 4<div class="level-grade">9–12</div></div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Standard</div>
+            <div class="lr-cell l1">Follow rules for safe and kind online behavior, including getting permission before sharing information and being respectful to others.</div>
+            <div class="lr-cell l2">Practice responsible digital citizenship: protect personal information, understand digital footprints, demonstrate online etiquette, and respond appropriately to cyberbullying.</div>
+            <div class="lr-cell l3">Demonstrate digital citizenship: manage digital identity, protect privacy and security, engage ethically online, address cyberbullying, and understand legal implications.</div>
+            <div class="lr-cell l4">Exhibit exemplary digital citizenship: strategically manage identity, implement advanced security, lead ethically online, and navigate complex legal and ethical issues.</div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Description</div>
+            <div class="lr-cell l1">Students learn basic online safety and etiquette, understand the importance of asking permission, and practice being kind in digital interactions.</div>
+            <div class="lr-cell l2">Students understand online actions have lasting consequences, protect privacy, communicate respectfully, and make responsible digital choices.</div>
+            <div class="lr-cell l3">Students actively manage online presence, implement strong security practices, participate constructively in digital communities, and understand consequences of digital actions.</div>
+            <div class="lr-cell l4">Students strategically curate digital presence for future opportunities, mentor others, navigate ethical dilemmas, and understand nuanced legal issues.</div>
+          </div>
+          <span class="show-examples" onclick="toggleExamples(this)">Show classroom examples ↓</span>
+          <div class="example-row" style="display:none;">
+            <div class="ex-label">Example</div>
+            <div class="ex-cell">Students learn rules like "ask before sharing photos" and "never share passwords." They practice telling a trusted adult when encountering uncomfortable content.</div>
+            <div class="ex-cell">Students learn their digital footprint is permanent. They create strong passwords, identify safe vs. private information, and practice appropriate etiquette for email and video calls.</div>
+            <div class="ex-cell">Students conduct digital footprint audits, strengthen security with two-factor authentication, and create response guides for online situations.</div>
+            <div class="ex-cell">Students create strategic digital presence plans for college and career, implement comprehensive security, and lead digital citizenship initiatives in their school.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="skill-section" data-ai="true">
+        <div class="skill-header" onclick="toggleSkill(this)">
+          <div class="sh-code">5.2</div>
+          <div class="sh-right">
+            <div class="sh-name">Ethical Technology Use & AI Ethics <span class="ai-mark">✦</span></div>
+            <div class="sh-intent">Understand ethical implications of technology including benefits and risks, data collection impacts, intended and unintended consequences, and human choices in design, deployment, and regulation.</div>
+          </div>
+          <div class="sh-toggle">Show levels ↓</div>
+        </div>
+        <div class="skill-detail">
+          <div class="level-header-row">
+            <div class="lh-cell"></div>
+            <div class="lh-cell">Level 1<div class="level-grade">K–2</div></div>
+            <div class="lh-cell">Level 2<div class="level-grade">3–5</div></div>
+            <div class="lh-cell">Level 3<div class="level-grade">6–8</div></div>
+            <div class="lh-cell">Level 4<div class="level-grade">9–12</div></div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Standard</div>
+            <div class="lr-cell l1">Understand basic privacy and fairness concepts when using technology, including keeping personal information private and treating everyone fairly.</div>
+            <div class="lr-cell l2">Understand and apply ethical principles including privacy, data security, fair treatment, and recognizing that technology choices have consequences.</div>
+            <div class="lr-cell l3">Analyze ethical implications of technology including privacy concerns, data collection, algorithmic bias, security responsibilities, and intended and unintended consequences.</div>
+            <div class="lr-cell l4">Engage with complex ethical frameworks including privacy laws, AI ethics, human rights, and moral philosophy; evaluate ethical trade-offs in system design considering multiple stakeholder perspectives.</div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Description</div>
+            <div class="lr-cell l1">Students learn foundational privacy and equity concepts — some information should stay private, and everyone deserves fair treatment online.</div>
+            <div class="lr-cell l2">Students learn ethical concepts (privacy, security, fairness, consequences), apply principles to technology decisions, and recognize their choices affect others.</div>
+            <div class="lr-cell l3">Students examine complex ethical issues in technology, understand data collection and AI systems, recognize responsibilities in protecting information, and analyze intended benefits and unintended harms.</div>
+            <div class="lr-cell l4">Students apply formal ethical frameworks, understand legal context, analyze trade-offs between competing values, consider diverse stakeholder impacts, and develop sophisticated moral reasoning.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DOMAIN 6 -->
+  <div class="domain-block" data-domain="d6">
+    <div class="domain-header" onclick="toggleDomain(this)">
+      <div class="dh-left"><div class="dh-num">6</div><div class="dh-title">Career Learning</div></div>
+      <div class="dh-toggle">▼</div>
+    </div>
+    <div class="domain-body">
+      <div class="skill-section" data-ai="true">
+        <div class="skill-header" onclick="toggleSkill(this)">
+          <div class="sh-code">6.1</div>
+          <div class="sh-right">
+            <div class="sh-name">Career Exploration & AI's Impact on Work <span class="ai-mark">✦</span></div>
+            <div class="sh-intent">Explore computing careers across diverse fields, understand how computing integrates with other disciplines, and analyze how automation and AI change the nature of work.</div>
+          </div>
+          <div class="sh-toggle">Show levels ↓</div>
+        </div>
+        <div class="skill-detail">
+          <div class="level-header-row">
+            <div class="lh-cell"></div>
+            <div class="lh-cell">Level 1<div class="level-grade">K–2</div></div>
+            <div class="lh-cell">Level 2<div class="level-grade">3–5</div></div>
+            <div class="lh-cell">Level 3<div class="level-grade">6–8</div></div>
+            <div class="lh-cell">Level 4<div class="level-grade">9–12</div></div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Standard</div>
+            <div class="lr-cell l1">Identify that people use computers in many different jobs and describe how technology helps workers in familiar fields.</div>
+            <div class="lr-cell l2">Explore diverse careers that use computing skills and explain how technology changes how people work.</div>
+            <div class="lr-cell l3">Analyze how AI and automation are transforming specific career fields, including job displacement, creation, and reskilling needs.</div>
+            <div class="lr-cell l4">Evaluate how AI reshapes workforce dynamics across industries and connect CS and AI skills to specific career pathways and postsecondary opportunities.</div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Description</div>
+            <div class="lr-cell l1">Students recognize that technology is used across many jobs — doctors, artists, farmers, teachers — and understand computing as a broad tool.</div>
+            <div class="lr-cell l2">Students research careers that use CS skills, interview community members, and connect classroom learning to real-world applications.</div>
+            <div class="lr-cell l3">Students analyze specific industries being transformed by AI (healthcare, logistics, creative fields), examine equity implications, and discuss reskilling realities.</div>
+            <div class="lr-cell l4">Students connect their CS and AI skills to specific career pathways, analyze labor market trends, and plan postsecondary steps including certifications, internships, and higher education.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="skill-section" data-ai="true">
+        <div class="skill-header" onclick="toggleSkill(this)">
+          <div class="sh-code">6.2</div>
+          <div class="sh-right">
+            <div class="sh-name">Teamwork & Collaboration Skills <span class="ai-mark">✦</span></div>
+            <div class="sh-intent">Develop professional collaboration skills — working effectively in diverse teams, inclusive practices, project management, and using collaborative tools and version control.</div>
+          </div>
+          <div class="sh-toggle">Show levels ↓</div>
+        </div>
+        <div class="skill-detail">
+          <div class="level-header-row">
+            <div class="lh-cell"></div>
+            <div class="lh-cell">Level 1<div class="level-grade">K–2</div></div>
+            <div class="lh-cell">Level 2<div class="level-grade">3–5</div></div>
+            <div class="lh-cell">Level 3<div class="level-grade">6–8</div></div>
+            <div class="lh-cell">Level 4<div class="level-grade">9–12</div></div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Standard</div>
+            <div class="lr-cell l1">Work with a partner on computing activities, taking turns and sharing responsibilities.</div>
+            <div class="lr-cell l2">Collaborate on computing projects by dividing tasks, communicating clearly, and combining contributions.</div>
+            <div class="lr-cell l3">Apply collaborative practices including role definition, constructive feedback, conflict resolution, and shared digital tools.</div>
+            <div class="lr-cell l4">Lead and contribute to diverse teams using professional collaboration practices, project management tools, and version control systems.</div>
+          </div>
+          <div class="level-row">
+            <div class="lr-label">Description</div>
+            <div class="lr-cell l1">Students practice pair programming and collaborative problem-solving, learning to listen, take turns, and share credit.</div>
+            <div class="lr-cell l2">Students divide computing projects into roles, practice clear communication, and combine work to achieve shared goals.</div>
+            <div class="lr-cell l3">Students use collaborative tools (shared docs, version control basics), define team roles, give and receive constructive feedback, and navigate disagreements productively.</div>
+            <div class="lr-cell l4">Students manage complex team projects using professional workflows — sprints, code reviews, version control, retrospectives — and reflect on inclusive team dynamics.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="no-results" class="no-results" style="display:none;">No standards match your current filters.</div>
+
+  </div><!-- end standards-content -->
+
+  <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #dde3ec;font-size:12px;color:#888;line-height:1.7;">
+    <strong style="color:#1A4C81;">Note:</strong> This Tier 3 reference includes representative standards for all domains. Full standards for all 25 knowledge and skill areas (Domains 1–6) are available in the complete COMP3+AI Design Kit. ✦ marks AI-related skill areas.<br><br>
+    <strong style="color:#1A4C81;">Transcend partners with communities to create and spread extraordinary learning for all.</strong>
+  </div>
+</div>
+
+<script>
+  function toggleDomain(header) {
+    const body = header.nextElementSibling;
+    const toggle = header.querySelector('.dh-toggle');
+    const open = body.style.display !== 'none';
+    body.style.display = open ? 'none' : 'block';
+    toggle.textContent = open ? '▶' : '▼';
+  }
+
+  function toggleSkill(header) {
+    const detail = header.nextElementSibling;
+    const toggle = header.querySelector('.sh-toggle');
+    const open = detail.classList.contains('open');
+    detail.classList.toggle('open', !open);
+    toggle.textContent = open ? 'Show levels ↓' : 'Hide levels ↑';
+  }
+
+  function toggleExamples(btn) {
+    const row = btn.nextElementSibling;
+    const open = row.style.display !== 'none';
+    row.style.display = open ? 'none' : 'grid';
+    btn.textContent = open ? 'Show classroom examples ↓' : 'Hide examples ↑';
+  }
+
+  function filterContent() {
+    const domainVal = document.getElementById('domainFilter').value;
+    const aiVal = document.getElementById('aiFilter').value;
+    const search = document.getElementById('searchBox').value.toLowerCase();
+    let anyVisible = false;
+
+    document.querySelectorAll('.domain-block').forEach(block => {
+      const domainMatch = domainVal === 'all' || block.dataset.domain === domainVal;
+      if (!domainMatch) { block.style.display = 'none'; return; }
+
+      let skillsVisible = 0;
+      block.querySelectorAll('.skill-section').forEach(skill => {
+        const aiMatch = aiVal === 'all' || (aiVal === 'ai' && skill.dataset.ai === 'true');
+        const text = skill.textContent.toLowerCase();
+        const searchMatch = !search || text.includes(search);
+        const show = aiMatch && searchMatch;
+        skill.style.display = show ? '' : 'none';
+        if (show) skillsVisible++;
+      });
+
+      block.style.display = skillsVisible > 0 ? '' : 'none';
+      if (skillsVisible > 0) anyVisible = true;
+    });
+
+    document.getElementById('no-results').style.display = anyVisible ? 'none' : 'block';
+  }
+</script>
+</body>
+</html>
